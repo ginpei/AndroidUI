@@ -34,6 +34,7 @@ public class PreferencesActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
             preferences.registerOnSharedPreferenceChangeListener(this);
+            updateSummary("name");
         }
 
         @Override
@@ -44,6 +45,12 @@ public class PreferencesActivity extends AppCompatActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals("name")) {
+                updateSummary(key);
+            }
+        }
+
+        private void updateSummary(String key) {
             Preference pref = findPreference(key);
             String value = preferences.getString(key, "");
             pref.setSummary(value);

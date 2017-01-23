@@ -22,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_spinner:
                 startActivity(new Intent(this, SpinnerActivity.class));
                 break;
+
+            case R.id.button_references:
+                startActivity(new Intent(this, PreferencesActivity.class));
+                break;
         }
     }
 }

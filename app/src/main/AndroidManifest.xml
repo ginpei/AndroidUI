@@ -16,7 +16,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".TextToSpeechActivity" />
-        <activity android:name=".SpinnerActivity"></activity>
+        <activity android:name=".SpinnerActivity" />
+        <activity android:name=".PreferencesActivity"></activity>
     </application>
 
 </manifest>

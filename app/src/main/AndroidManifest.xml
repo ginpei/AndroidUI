@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TextToSpeechActivity"></activity>
+        <activity android:name=".TextToSpeechActivity" />
+        <activity android:name=".SpinnerActivity"></activity>
     </application>
 
 </manifest>

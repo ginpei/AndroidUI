@@ -18,6 +18,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_text_to_speech:
                 startActivity(new Intent(this, TextToSpeechActivity.class));
                 break;
+
+            case R.id.button_spinner:
+                startActivity(new Intent(this, SpinnerActivity.class));
+                break;
         }
     }
 }

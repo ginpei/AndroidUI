@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -121,6 +122,12 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
 
         @Override
         public void onError(int error) {
+            String message = getErrorMessage(error);
+            setStatusText(message);
+        }
+
+        @NonNull
+        private String getErrorMessage(int error) {
             String message;
             switch (error) {
                 case ERROR_NETWORK_TIMEOUT:
@@ -159,8 +166,7 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
                 default:
                     message = "Unkown error: " + error;
             }
-
-            setStatusText(message);
+            return message;
         }
 
         @Override

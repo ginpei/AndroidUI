@@ -165,7 +165,7 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
                     break;
 
                 default:
-                    message = "Unkown error: " + error;
+                    message = "Unknown error: " + error;
             }
             return message;
         }

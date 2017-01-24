@@ -2,10 +2,15 @@ package info.ginpei.androidui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+
+import java.util.Arrays;
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -35,6 +40,8 @@ public class PreferencesActivity extends AppCompatActivity {
             super.onResume();
             preferences.registerOnSharedPreferenceChangeListener(this);
             updateSummary("name");
+            updateSummary("whatILikeBest");
+            updateSummary("whatIPrefer");
         }
 
         @Override
@@ -45,15 +52,25 @@ public class PreferencesActivity extends AppCompatActivity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals("name")) {
-                updateSummary(key);
-            }
+            updateSummary(key);
         }
 
         private void updateSummary(String key) {
             Preference pref = findPreference(key);
-            String value = preferences.getString(key, "");
-            pref.setSummary(value);
+
+            String value;
+            if (pref instanceof EditTextPreference || pref instanceof ListPreference) {
+                value = preferences.getString(key, "");
+            } else if (pref instanceof MultiSelectListPreference) {
+                CharSequence entries[] = ((MultiSelectListPreference) pref).getEntries();
+                value = Arrays.toString(entries);
+            } else {
+                value = null;
+            }
+
+            if (value != null) {
+                pref.setSummary(value);
+            }
         }
     }
 }

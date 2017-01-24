@@ -6,4 +6,24 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="Name" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="feelingLucky"
+        android:title="I feel lucky" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="feelingGreat"
+        android:title="I feel great" />
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/spinner_values"
+        android:entryValues="@array/spinner_values"
+        android:key="whatILikeBest"
+        android:title="What I Like the Best" />
+    <MultiSelectListPreference
+        android:defaultValue="@array/spinner_values"
+        android:entries="@array/spinner_values"
+        android:entryValues="@array/spinner_values"
+        android:key="whatIPrefer"
+        android:title="What I prefer" />
 </PreferenceScreen>

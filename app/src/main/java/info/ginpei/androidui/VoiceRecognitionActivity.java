@@ -122,6 +122,7 @@ public class VoiceRecognitionActivity extends AppCompatActivity {
 
         @Override
         public void onError(int error) {
+            listening = false;
             String message = getErrorMessage(error);
             setStatusText(message);
         }

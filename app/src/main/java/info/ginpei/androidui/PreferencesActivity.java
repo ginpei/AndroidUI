@@ -10,7 +10,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
-import java.util.Arrays;
+import java.util.Set;
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -62,8 +62,13 @@ public class PreferencesActivity extends AppCompatActivity {
             if (pref instanceof EditTextPreference || pref instanceof ListPreference) {
                 value = preferences.getString(key, "");
             } else if (pref instanceof MultiSelectListPreference) {
-                CharSequence entries[] = ((MultiSelectListPreference) pref).getEntries();
-                value = Arrays.toString(entries);
+                Set<String> strings = preferences.getStringSet("whatIPrefer", null);
+                if (strings == null) {
+                    value = "";
+                } else {
+                    value = strings.toString();
+                    value = value.substring(1, value.length() - 1);
+                }
             } else {
                 value = null;
             }

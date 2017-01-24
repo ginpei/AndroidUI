@@ -3,6 +3,9 @@ package info.ginpei.androidui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,6 +16,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_preferences:
+                startActivity(new Intent(this, PreferencesActivity.class));
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_text_to_speech:
@@ -21,10 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.button_spinner:
                 startActivity(new Intent(this, SpinnerActivity.class));
-                break;
-
-            case R.id.button_references:
-                startActivity(new Intent(this, PreferencesActivity.class));
                 break;
         }
     }

@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_spinner:
                 startActivity(new Intent(this, SpinnerActivity.class));
                 break;
+
+            case R.id.button_listView:
+                startActivity(new Intent(this, ListViewActivity.class));
+                break;
         }
     }
 }

@@ -21,6 +21,7 @@
         <activity android:name=".SpinnerActivity" />
         <activity android:name=".PreferencesActivity" />
         <activity android:name=".VoiceRecognitionActivity" />
+        <activity android:name=".ListViewActivity"></activity>
     </application>
 
 </manifest>

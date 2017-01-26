@@ -17,7 +17,20 @@ public class TextToSpeechActivity extends AppCompatActivity implements TextToSpe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_to_speech);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         tts = new TextToSpeech(this, this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        tts.stop();
+        tts.shutdown();
+        tts = null;
     }
 
     public void onClick(View view) {

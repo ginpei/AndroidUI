@@ -15,22 +15,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ListViewActivity extends AppCompatActivity {
 
-    final static ArrayList<User> users = new ArrayList<>(Arrays.asList(
-            new User("Alice", 10, "Nice guy."),
-            new User("Bob", 22, "Cool guy."),
-            new User("Charlie", 33, "Good guy."),
-            new User("Dan", 44, "Great guy."),
-            new User("Fred", 55, "Awesome guy."),
-            new User("George", 55, "Awesome guy."),
-            new User("Hin", 21, "A guy."),
-            new User("Jim", 22, "A guy."),
-            new User("Kim", 23, "A guy."),
-            new User("Lin", 24, "A guy.")
-    ));
+    final static ArrayList<User> users = User.getDummyList();
     ListView listView;
 
     @Override

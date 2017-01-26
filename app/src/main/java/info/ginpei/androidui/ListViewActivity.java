@@ -61,7 +61,6 @@ public class ListViewActivity extends AppCompatActivity {
         ArrayAdapter<User> adapter = new ArrayAdapter<User>(
                 this,
                 android.R.layout.simple_list_item_2,
-                android.R.id.text1,
                 users
         ) {
             @NonNull

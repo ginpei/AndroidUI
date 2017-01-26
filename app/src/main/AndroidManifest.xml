@@ -17,12 +17,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TextToSpeechActivity" />
-        <activity android:name=".SpinnerActivity" />
-        <activity android:name=".PreferencesActivity" />
-        <activity android:name=".VoiceRecognitionActivity" />
-        <activity android:name=".ListViewActivity" />
-        <activity android:name=".DetailFromListViewActivity" />
+        <activity
+            android:name=".TextToSpeechActivity"
+            android:label="Text to Speech" />
+        <activity
+            android:name=".SpinnerActivity"
+            android:label="Spinner UI" />
+        <activity
+            android:name=".PreferencesActivity"
+            android:label="Preferences" />
+        <activity
+            android:name=".VoiceRecognitionActivity"
+            android:label="Voice Recognition" />
+        <activity
+            android:name=".ListViewActivity"
+            android:label="List View UI" />
+        <activity
+            android:name=".DetailFromListViewActivity"
+            android:label="Detail" />
     </application>
 
 </manifest>

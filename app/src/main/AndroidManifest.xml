@@ -22,7 +22,7 @@
         <activity android:name=".PreferencesActivity" />
         <activity android:name=".VoiceRecognitionActivity" />
         <activity android:name=".ListViewActivity" />
-        <activity android:name=".DetailFromListViewActivity"></activity>
+        <activity android:name=".DetailFromListViewActivity" />
     </application>
 
 </manifest>

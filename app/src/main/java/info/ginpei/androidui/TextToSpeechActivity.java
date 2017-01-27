@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import java.util.Locale;
 
-public class TextToSpeechActivity extends AppCompatActivity implements TextToSpeech.OnInitListener {
+public class TextToSpeechActivity extends AppCompatActivity {
 
     private TextToSpeech tts;
 
@@ -17,7 +17,14 @@ public class TextToSpeechActivity extends AppCompatActivity implements TextToSpe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_to_speech);
-        tts = new TextToSpeech(this, this);
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    tts.setLanguage(Locale.US);
+                }
+            }
+        });
     }
 
     public void onClick(View view) {
@@ -38,13 +45,6 @@ public class TextToSpeechActivity extends AppCompatActivity implements TextToSpe
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         } else {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-        }
-    }
-
-    @Override
-    public void onInit(int status) {
-        if (status == TextToSpeech.SUCCESS) {
-            tts.setLanguage(Locale.US);
         }
     }
 }

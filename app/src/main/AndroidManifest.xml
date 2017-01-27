@@ -38,6 +38,10 @@
         <activity
             android:name=".CustomListViewActivity"
             android:label="Custom List View UI" />
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

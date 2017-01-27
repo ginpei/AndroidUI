@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_customListView:
                 startActivity(new Intent(this, CustomListViewActivity.class));
                 break;
+
+            case R.id.button_scrolling:
+                startActivity(new Intent(this, ScrollingActivity.class));
+                break;
         }
     }
 }

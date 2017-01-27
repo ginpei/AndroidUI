@@ -4,6 +4,7 @@
     android:id="@+id/activity_dialogs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -15,4 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="OK" />
+
+    <Button
+        android:id="@+id/button_ok_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="OK and Cancel" />
 </LinearLayout>

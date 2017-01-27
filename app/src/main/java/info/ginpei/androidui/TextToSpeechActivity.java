@@ -16,6 +16,7 @@ public class TextToSpeechActivity extends AppCompatActivity {
 
     public static final String TAG = "TextToSpeechActivity";
     public static final String MY_UTTERANCE_ID = "My Utterance ID";
+    public static final Locale LOCALE_DEFAULT = Locale.US;
     private TextToSpeech tts;
     private TextView statusTextView;
 
@@ -36,7 +37,7 @@ public class TextToSpeechActivity extends AppCompatActivity {
             @Override
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
-                    tts.setLanguage(Locale.US);
+                    updateTtsSettings();
                     setOnUtteranceProgressListener();
                 }
             }
@@ -58,6 +59,10 @@ public class TextToSpeechActivity extends AppCompatActivity {
                 speak();
                 break;
         }
+    }
+
+    private void updateTtsSettings() {
+        tts.setLanguage(LOCALE_DEFAULT);
     }
 
     public void speak() {

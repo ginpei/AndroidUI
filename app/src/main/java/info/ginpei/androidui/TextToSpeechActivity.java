@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -16,11 +17,15 @@ public class TextToSpeechActivity extends AppCompatActivity {
     public static final String TAG = "TextToSpeechActivity";
     public static final String MY_UTTERANCE_ID = "My Utterance ID";
     private TextToSpeech tts;
+    private TextView statusTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_to_speech);
+
+        statusTextView = (TextView) findViewById(R.id.textView_status);
+        setStatusText("Ready.");
     }
 
     @Override
@@ -36,16 +41,51 @@ public class TextToSpeechActivity extends AppCompatActivity {
                         @Override
                         public void onStart(String s) {
                             Log.d("TextToSpeechActivity", "Start " + s);
+                            setText("Speaking...");
+                            toggle(true);
                         }
 
                         @Override
                         public void onDone(String s) {
                             Log.d(TAG, "Done " + s);
+                            setText("Done.");
+                            toggle(false);
                         }
 
                         @Override
                         public void onError(String s) {
                             Log.d(TAG, "Error " + s);
+                            setText("Error!");
+                            toggle(false);
+                        }
+
+                        /**
+                         * A function which handles UI have to run on the UI thread.
+                         * (But sometimes setting text can work?)
+                         *
+                         * @param text
+                         */
+                        private void setText(final String text) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    setStatusText(text);
+                                }
+                            });
+                        }
+
+                        /**
+                         * A function which handles UI have to run on the UI thread.
+                         *
+                         * @param speaking
+                         */
+                        private void toggle(final boolean speaking) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    toggleSpeakingIcon(speaking);
+                                }
+                            });
                         }
                     });
                 }
@@ -76,11 +116,22 @@ public class TextToSpeechActivity extends AppCompatActivity {
     }
 
     public void speak(String text) {
+        setStatusText("Initializing...");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // if utterance ID is not given, progress listener doesn't fire
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, MY_UTTERANCE_ID);
         } else {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
         }
+    }
+
+    public void setStatusText(String text) {
+        statusTextView.setText(text);
+    }
+
+    private void toggleSpeakingIcon(boolean speaking) {
+        int visibility = speaking ? View.VISIBLE : View.INVISIBLE;
+        findViewById(R.id.imageView_speaking).setVisibility(visibility);
     }
 }

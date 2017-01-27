@@ -17,6 +17,12 @@ public class TextToSpeechActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_to_speech);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -25,6 +31,15 @@ public class TextToSpeechActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        tts.stop();
+        tts.shutdown();
+        tts = null;
     }
 
     public void onClick(View view) {

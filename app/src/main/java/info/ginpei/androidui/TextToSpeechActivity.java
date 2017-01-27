@@ -39,22 +39,22 @@ public class TextToSpeechActivity extends AppCompatActivity {
                     tts.setLanguage(Locale.US);
                     tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                         @Override
-                        public void onStart(String s) {
-                            Log.d("TextToSpeechActivity", "Start " + s);
+                        public void onStart(String utteranceId) {
+                            Log.d("TextToSpeechActivity", "Start " + utteranceId);
                             setText("Speaking...");
                             toggle(true);
                         }
 
                         @Override
-                        public void onDone(String s) {
-                            Log.d(TAG, "Done " + s);
+                        public void onDone(String utteranceId) {
+                            Log.d(TAG, "Done " + utteranceId);
                             setText("Done.");
                             toggle(false);
                         }
 
                         @Override
-                        public void onError(String s) {
-                            Log.d(TAG, "Error " + s);
+                        public void onError(String utteranceId) {
+                            Log.d(TAG, "Error " + utteranceId);
                             setText("Error!");
                             toggle(false);
                         }

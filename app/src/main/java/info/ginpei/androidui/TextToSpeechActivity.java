@@ -37,57 +37,7 @@ public class TextToSpeechActivity extends AppCompatActivity {
             public void onInit(int status) {
                 if (status == TextToSpeech.SUCCESS) {
                     tts.setLanguage(Locale.US);
-                    tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                        @Override
-                        public void onStart(String utteranceId) {
-                            Log.d("TextToSpeechActivity", "Start " + utteranceId);
-                            setText("Speaking...");
-                            toggle(true);
-                        }
-
-                        @Override
-                        public void onDone(String utteranceId) {
-                            Log.d(TAG, "Done " + utteranceId);
-                            setText("Done.");
-                            toggle(false);
-                        }
-
-                        @Override
-                        public void onError(String utteranceId) {
-                            Log.d(TAG, "Error " + utteranceId);
-                            setText("Error!");
-                            toggle(false);
-                        }
-
-                        /**
-                         * A function which handles UI have to run on the UI thread.
-                         * (But sometimes setting text can work?)
-                         *
-                         * @param text
-                         */
-                        private void setText(final String text) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setStatusText(text);
-                                }
-                            });
-                        }
-
-                        /**
-                         * A function which handles UI have to run on the UI thread.
-                         *
-                         * @param speaking
-                         */
-                        private void toggle(final boolean speaking) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    toggleSpeakingIcon(speaking);
-                                }
-                            });
-                        }
-                    });
+                    setOnUtteranceProgressListener();
                 }
             }
         });
@@ -133,5 +83,59 @@ public class TextToSpeechActivity extends AppCompatActivity {
     private void toggleSpeakingIcon(boolean speaking) {
         int visibility = speaking ? View.VISIBLE : View.INVISIBLE;
         findViewById(R.id.imageView_speaking).setVisibility(visibility);
+    }
+
+    private int setOnUtteranceProgressListener() {
+        return tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+            @Override
+            public void onStart(String utteranceId) {
+                Log.d("TextToSpeechActivity", "Start " + utteranceId);
+                setText("Speaking...");
+                toggle(true);
+            }
+
+            @Override
+            public void onDone(String utteranceId) {
+                Log.d(TAG, "Done " + utteranceId);
+                setText("Done.");
+                toggle(false);
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+                Log.d(TAG, "Error " + utteranceId);
+                setText("Error!");
+                toggle(false);
+            }
+
+            /**
+             * A function which handles UI have to run on the UI thread.
+             * (But sometimes setting text can work?)
+             *
+             * @param text
+             */
+            private void setText(final String text) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        setStatusText(text);
+                    }
+                });
+            }
+
+            /**
+             * A function which handles UI have to run on the UI thread.
+             *
+             * @param speaking
+             */
+            private void toggle(final boolean speaking) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        toggleSpeakingIcon(speaking);
+                    }
+                });
+            }
+        });
     }
 }

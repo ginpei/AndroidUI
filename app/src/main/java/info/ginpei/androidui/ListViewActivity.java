@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class ListViewActivity extends AppCompatActivity {
 
     final static ArrayList<User> users = User.getDummyList();
     ListView listView;
+    private ArrayAdapter<User> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,8 @@ public class ListViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_view);
 
         listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(createArrayAdapter());
+        adapter = createArrayAdapter();
+        listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -54,6 +57,13 @@ public class ListViewActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), DetailFromListViewActivity.class);
         intent.putExtra("user", user);
         startActivity(intent);
+    }
+
+    private void removeUser(int position) {
+        User user = users.remove(position);
+        adapter.notifyDataSetChanged();
+        String message = user.name + " has been removed.";
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @NonNull
@@ -90,11 +100,15 @@ public class ListViewActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = (int) info.id;
+        User user = users.get(position);
         switch (item.getItemId()) {
             case R.id.detail:
-                int position = (int) info.id;
-                User user = users.get(position);
                 startDetailActivity(user);
+                return true;
+
+            case R.id.remove:
+                removeUser(position);
                 return true;
 
             default:

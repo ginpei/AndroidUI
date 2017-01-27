@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, CustomListViewActivity.class));
                 break;
 
+            case R.id.button_dialogs:
+                startActivity(new Intent(this, DialogsActivity.class));
+                break;
+
             case R.id.button_scrolling:
                 startActivity(new Intent(this, ScrollingActivity.class));
                 break;

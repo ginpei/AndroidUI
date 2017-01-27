@@ -119,7 +119,7 @@ public class TextToSpeechActivity extends AppCompatActivity {
         setStatusText("Initializing...");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // if utterance ID is not given, progress listener doesn't fire
+            // if utterance ID is not given (null), progress listener doesn't fire
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, MY_UTTERANCE_ID);
         } else {
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);

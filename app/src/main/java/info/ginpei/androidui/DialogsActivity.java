@@ -39,41 +39,43 @@ public class DialogsActivity extends AppCompatActivity {
     }
 
     private void openOkDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        dialog.setTitle("Hi");
-        dialog.setMessage("What's up man?\nThis is a simple dialog.");
+        builder.setTitle("Hi");
+        builder.setMessage("What's up man?\nThis is a simple dialog.");
 
-        dialog.setPositiveButton(android.R.string.ok, null);
+        builder.setPositiveButton(android.R.string.ok, null);
 
-        dialog.create().show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        // or: dialog = builder.show()
     }
 
     private void openOkCancelDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        dialog.setTitle("Confirm");
-        dialog.setMessage("Are you sure to do something important?");
+        builder.setTitle("Confirm");
+        builder.setMessage("Are you sure to do something important?");
 
-        dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getApplicationContext(), "The task has been done.", Toast.LENGTH_SHORT).show();
             }
         });
 
-        dialog.setNegativeButton(android.R.string.cancel, null);
+        builder.setNegativeButton(android.R.string.cancel, null);
 
-        dialog.create().show();
+        builder.show();
     }
 
     private void openCustomDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        dialog.setTitle("Add");
-        dialog.setView(R.layout.layout_custom_dialog);
+        builder.setTitle("Add");
+        builder.setView(R.layout.layout_custom_dialog);
 
-        dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 AlertDialog alertDialog = (AlertDialog) dialog;
@@ -88,8 +90,8 @@ public class DialogsActivity extends AppCompatActivity {
             }
         });
 
-        dialog.setNegativeButton(android.R.string.cancel, null);
+        builder.setNegativeButton(android.R.string.cancel, null);
 
-        dialog.create().show();
+        builder.show();
     }
 }

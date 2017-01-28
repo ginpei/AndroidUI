@@ -36,6 +36,13 @@ public class DialogsActivity extends AppCompatActivity {
                 openCustomDialog();
             }
         });
+
+        ((Button) findViewById(R.id.button_custom_with_buttons)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openCustomDialogWithButtons();
+            }
+        });
     }
 
     private void openOkDialog() {
@@ -93,5 +100,40 @@ public class DialogsActivity extends AppCompatActivity {
         builder.setNegativeButton(android.R.string.cancel, null);
 
         builder.show();
+    }
+
+    private void openCustomDialogWithButtons() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Add");
+
+        final View view = getLayoutInflater().inflate(R.layout.layout_custom_dialog_with_buttons, null);
+        builder.setView(view);
+
+        final AlertDialog dialog = builder.create();
+
+        view.findViewById(R.id.button_ok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View okButton) {
+                EditText nameEditText = (EditText) view.findViewById(R.id.editText_name);
+                String name = nameEditText.getText().toString();
+
+                if (name.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Canceled since required items are not given.", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(getApplicationContext(), name + " has been created.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        view.findViewById(R.id.button_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View cancelButton) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

@@ -12,9 +12,9 @@
     tools:context="info.ginpei.androidui.DatabaseActivity">
 
     <TextView
-        android:text="Handle Eadh Column"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Handle Eadh Column" />
 
     <Button
         android:id="@+id/button_create"
@@ -41,9 +41,9 @@
         android:text="Delete" />
 
     <TextView
-        android:text="List of the Table Content (READ to update below)"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="List of the Table Content (READ to update below)" />
 
     <ListView
         android:id="@+id/listView"

@@ -39,8 +39,37 @@ public class DatabaseActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listView);
 
-        initListView();
+        userDbHelper = new UserReaderDbHelper(getApplicationContext());
 
+        initListView();
+        bindEvents();
+    }
+
+    private void initListView() {
+        users = new User.List();
+        adapter = new ArrayAdapter<User>(
+                this,
+                android.R.layout.simple_list_item_2,
+                android.R.id.text1,
+                users
+        ) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+
+                User user = users.get(position);
+                ((TextView) view.findViewById(android.R.id.text1)).setText(user.name);
+                String description = "ID:" + user.id + ". Age: " + user.age + ". Comment: " + user.comment;
+                ((TextView) view.findViewById(android.R.id.text2)).setText(description);
+
+                return view;
+            }
+        };
+        listView.setAdapter(adapter);
+    }
+
+    private void bindEvents() {
         findViewById(R.id.button_create).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,32 +97,6 @@ public class DatabaseActivity extends AppCompatActivity {
                 delete();
             }
         });
-
-        userDbHelper = new UserReaderDbHelper(getApplicationContext());
-    }
-
-    private void initListView() {
-        users = new User.List();
-        adapter = new ArrayAdapter<User>(
-                this,
-                android.R.layout.simple_list_item_2,
-                android.R.id.text1,
-                users
-        ) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-
-                User user = users.get(position);
-                ((TextView) view.findViewById(android.R.id.text1)).setText(user.name);
-                String description = "ID:" + user.id + ". Age: " + user.age + ". Comment: " + user.comment;
-                ((TextView) view.findViewById(android.R.id.text2)).setText(description);
-
-                return view;
-            }
-        };
-        listView.setAdapter(adapter);
     }
 
     private void create() {

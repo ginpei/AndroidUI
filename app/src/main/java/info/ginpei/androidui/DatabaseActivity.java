@@ -218,7 +218,7 @@ public class DatabaseActivity extends AppCompatActivity {
 
     class UserReaderDbHelper extends SQLiteOpenHelper {
         public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "UserReader.db";
+        public static final String DATABASE_NAME = "DatabaseActivity.UserReader.db";
 
         private static final String SQL_CREATE_ENTRIES =
                 "create table " + UserEntry.TABLE_NAME + " (" +
@@ -232,7 +232,7 @@ public class DatabaseActivity extends AppCompatActivity {
                 "drop table if exists " + UserEntry.TABLE_NAME;
 
         public UserReaderDbHelper(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+            super(context, getPackageName() + "." + DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override

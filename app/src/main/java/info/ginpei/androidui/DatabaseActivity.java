@@ -10,10 +10,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,11 +28,18 @@ public class DatabaseActivity extends AppCompatActivity {
 
     public static final String TAG = "DatabaseActivity";
     private UserReaderDbHelper userDbHelper;
+    private ListView listView;
+    private User.List users;
+    private ArrayAdapter<User> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
+
+        listView = (ListView) findViewById(R.id.listView);
+
+        initListView();
 
         findViewById(R.id.button_create).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +70,30 @@ public class DatabaseActivity extends AppCompatActivity {
         });
 
         userDbHelper = new UserReaderDbHelper(getApplicationContext());
+    }
+
+    private void initListView() {
+        users = new User.List();
+        adapter = new ArrayAdapter<User>(
+                this,
+                android.R.layout.simple_list_item_2,
+                android.R.id.text1,
+                users
+        ) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+
+                User user = users.get(position);
+                ((TextView) view.findViewById(android.R.id.text1)).setText(user.name);
+                String description = "ID:" + user.id + ". Age: " + user.age + ". Comment: " + user.comment;
+                ((TextView) view.findViewById(android.R.id.text2)).setText(description);
+
+                return view;
+            }
+        };
+        listView.setAdapter(adapter);
     }
 
     private void create() {
@@ -94,15 +130,11 @@ public class DatabaseActivity extends AppCompatActivity {
                 null,
                 sortOrder
         );
-
-        List itemIds = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            long id = cursor.getLong(cursor.getColumnIndexOrThrow(UserEntry._ID));
-            itemIds.add(id);
-        }
+        users.update(cursor);
+        adapter.notifyDataSetChanged();
         cursor.close();
 
-        Toast.makeText(this, "Read IDs: " + itemIds.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Read (and updated the list below)", Toast.LENGTH_SHORT).show();
     }
 
     private void update() {
@@ -131,6 +163,36 @@ public class DatabaseActivity extends AppCompatActivity {
         db.delete(UserEntry.TABLE_NAME, selection, selectionArgs);
 
         Toast.makeText(this, "Deleted ", Toast.LENGTH_SHORT).show();
+    }
+
+    static class User {
+        long id;
+        String name;
+        int age;
+        String comment;
+
+        public User(long id, String name, int age, String comment) {
+            this.id = id;
+            this.name = name;
+            this.age = age;
+            this.comment = comment;
+        }
+
+        static class List extends ArrayList<User> {
+            public void update(Cursor cursor) {
+                clear();
+
+                while (cursor.moveToNext()) {
+                    long id = cursor.getLong(cursor.getColumnIndexOrThrow(UserEntry._ID));
+                    String name = cursor.getString(cursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAME_NAME));
+                    int age = cursor.getInt(cursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAME_AGE));
+                    String comment = cursor.getString(cursor.getColumnIndexOrThrow(UserEntry.COLUMN_NAME_COMMENT));
+
+                    User user = new User(id, name, age, comment);
+                    add(user);
+                }
+            }
+        }
     }
 
     static class UserReaderContract {

@@ -64,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_scrolling:
                 startActivity(new Intent(this, ScrollingActivity.class));
                 break;
+
+            case R.id.button_database:
+                startActivity(new Intent(this, DatabaseActivity.class));
+                break;
         }
     }
 }

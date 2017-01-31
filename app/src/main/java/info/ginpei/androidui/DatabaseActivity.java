@@ -108,7 +108,7 @@ public class DatabaseActivity extends AppCompatActivity {
         SQLiteDatabase dbWritable = userDbHelper.getWritableDatabase();
         long id = dbWritable.insert(UserEntry.TABLE_NAME, null, values);
 
-        Toast.makeText(this, "Created widh ID " + id, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Created with ID " + id, Toast.LENGTH_SHORT).show();
     }
 
     private void read() {

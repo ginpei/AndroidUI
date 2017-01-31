@@ -108,7 +108,7 @@ public class DatabaseActivity extends AppCompatActivity {
         SQLiteDatabase dbWritable = userDbHelper.getWritableDatabase();
         long id = dbWritable.insert(UserEntry.TABLE_NAME, null, values);
 
-        Toast.makeText(this, "Created with ID " + id, Toast.LENGTH_SHORT).show();
+        showLog("Created with ID " + id);
     }
 
     private void read() {
@@ -137,7 +137,7 @@ public class DatabaseActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         cursor.close();
 
-        Toast.makeText(this, "Read (and updated the list below)", Toast.LENGTH_SHORT).show();
+        showLog("Read (and updated the list below)");
     }
 
     private void update() {
@@ -155,7 +155,7 @@ public class DatabaseActivity extends AppCompatActivity {
                 selectionArgs
         );
 
-        Toast.makeText(this, "Updated ", Toast.LENGTH_SHORT).show();
+        showLog("Updated ");
     }
 
     private void delete() {
@@ -165,7 +165,11 @@ public class DatabaseActivity extends AppCompatActivity {
         SQLiteDatabase db = userDbHelper.getReadableDatabase();
         db.delete(UserEntry.TABLE_NAME, selection, selectionArgs);
 
-        Toast.makeText(this, "Deleted ", Toast.LENGTH_SHORT).show();
+        showLog("Deleted ");
+    }
+
+    private void showLog(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
     static class User {

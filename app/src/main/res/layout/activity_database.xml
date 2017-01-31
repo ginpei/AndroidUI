@@ -11,6 +11,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="info.ginpei.androidui.DatabaseActivity">
 
+    <TextView
+        android:text="Handle Eadh Column"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/button_create"
         android:layout_width="match_parent"
@@ -34,6 +39,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Delete" />
+
+    <TextView
+        android:text="List of the Table Content (READ to update below)"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/listView"

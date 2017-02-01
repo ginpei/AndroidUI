@@ -86,9 +86,10 @@
             android:text="Progress Bar and Seek Bar" />
 
         <Button
+            android:id="@+id/button_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Extra (Nothing will happen)" />
+            android:onClick="onClick"
+            android:text="Service" />
     </LinearLayout>
 </ScrollView>

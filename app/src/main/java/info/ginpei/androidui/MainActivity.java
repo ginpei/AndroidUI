@@ -76,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_progressBar:
                 startActivity(new Intent(this, ProgressBarActivity.class));
                 break;
+
+            case R.id.button_service:
+                startActivity(new Intent(this, MyServiceActivity.class));
+                break;
         }
     }
 }

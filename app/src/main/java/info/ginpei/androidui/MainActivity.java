@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_database:
                 startActivity(new Intent(this, DatabaseActivity.class));
                 break;
+
+            case R.id.button_broadcast:
+                startActivity(new Intent(this, BroadcastActivity.class));
+                break;
         }
     }
 }

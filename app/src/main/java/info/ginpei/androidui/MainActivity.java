@@ -72,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_broadcast:
                 startActivity(new Intent(this, BroadcastActivity.class));
                 break;
+
+            case R.id.button_progressBar:
+                startActivity(new Intent(this, ProgressBarActivity.class));
+                break;
         }
     }
 }

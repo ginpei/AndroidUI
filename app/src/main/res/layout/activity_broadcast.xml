@@ -12,7 +12,20 @@
     tools:context="info.ginpei.androidui.BroadcastActivity">
 
     <TextView
-        android:text="Turn the charger connection on and off then check Android Studio's console."
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Listening powerplug on and off..." />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="" />
 </LinearLayout>

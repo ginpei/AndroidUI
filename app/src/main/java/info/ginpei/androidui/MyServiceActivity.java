@@ -8,45 +8,77 @@ import android.widget.Button;
 
 public class MyServiceActivity extends AppCompatActivity {
 
-    private Button stopButton;
-    private Button startButton;
+    private Button stopServiceButton;
+    private Button startServiceButton;
+    private Button stopIntentServiceButton;
+    private Button startIntentServiceButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_service);
 
-        startButton = (Button) findViewById(R.id.button_start);
-        stopButton = (Button) findViewById(R.id.button_stop);
+        startServiceButton = (Button) findViewById(R.id.button_start);
+        stopServiceButton = (Button) findViewById(R.id.button_stop);
+        startIntentServiceButton = (Button) findViewById(R.id.button_startIntent);
+        stopIntentServiceButton = (Button) findViewById(R.id.button_stopIntent);
 
-        startButton.setOnClickListener(new View.OnClickListener() {
+        startServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startMyService();
             }
         });
-        stopButton.setOnClickListener(new View.OnClickListener() {
+        stopServiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 stopMyService();
             }
         });
 
-        startButton.setEnabled(true);
-        stopButton.setEnabled(false);
+        startIntentServiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMyIntentService();
+            }
+        });
+        stopIntentServiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopMyIntentService();
+            }
+        });
+
+        startServiceButton.setEnabled(true);
+        stopServiceButton.setEnabled(false);
+        stopMyIntentService();
     }
 
     public void startMyService() {
         startService(new Intent(this, MyService.class));
 
-        startButton.setEnabled(false);
-        stopButton.setEnabled(true);
+        startServiceButton.setEnabled(false);
+        stopServiceButton.setEnabled(true);
     }
 
     public void stopMyService() {
         stopService(new Intent(this, MyService.class));
 
-        startButton.setEnabled(true);
-        stopButton.setEnabled(false);
+        startServiceButton.setEnabled(true);
+        stopServiceButton.setEnabled(false);
+    }
+
+    public void startMyIntentService() {
+        startService(new Intent(this, MyIntentService.class));
+
+        startIntentServiceButton.setEnabled(false);
+        stopIntentServiceButton.setEnabled(true);
+    }
+
+    public void stopMyIntentService() {
+        stopService(new Intent(this, MyIntentService.class));
+
+        startIntentServiceButton.setEnabled(true);
+        stopIntentServiceButton.setEnabled(false);
     }
 }

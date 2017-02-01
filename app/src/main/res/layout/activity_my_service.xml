@@ -34,4 +34,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Stop Intent Service" />
+
+    <Button
+        android:id="@+id/button_notify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Show Notification" />
 </LinearLayout>

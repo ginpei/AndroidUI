@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_broadcast"
     android:layout_width="match_parent"
@@ -14,12 +15,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="Listening powerplug on and off..." />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="Status"
         android:textStyle="bold" />
 
@@ -28,4 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="" />
+
+    <ImageView
+        android:id="@+id/imageView_charging"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        app:srcCompat="@android:drawable/ic_lock_idle_charging" />
+
 </LinearLayout>

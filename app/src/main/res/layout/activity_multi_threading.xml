@@ -12,7 +12,7 @@
     tools:context="info.ginpei.androidui.MultiThreadingActivity">
 
     <Button
-        android:id="@+id/button_start"
+        android:id="@+id/button_startThread"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Start a Thread" />
@@ -24,7 +24,7 @@
         android:text="Start a AsyncTask" />
 
     <Button
-        android:id="@+id/button_handler"
+        android:id="@+id/button_startHandler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Start a Handler" />

@@ -15,10 +15,10 @@ public class MultiThreadingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_threading);
 
-        ((Button) findViewById(R.id.button_start)).setOnClickListener(new View.OnClickListener() {
+        ((Button) findViewById(R.id.button_startThread)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                start();
+                startThread();
             }
         });
 
@@ -29,7 +29,7 @@ public class MultiThreadingActivity extends AppCompatActivity {
             }
         });
 
-        ((Button) findViewById(R.id.button_handler)).setOnClickListener(new View.OnClickListener() {
+        ((Button) findViewById(R.id.button_startHandler)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startHandler();
@@ -37,7 +37,7 @@ public class MultiThreadingActivity extends AppCompatActivity {
         });
     }
 
-    private void start() {
+    private void startThread() {
         Thread thread = new Thread() {
             @Override
             public void run() {

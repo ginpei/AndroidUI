@@ -17,4 +17,10 @@
         android:layout_height="wrap_content"
         android:text="Start a Thread" />
 
+    <Button
+        android:id="@+id/button_startAsyncTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start a AsyncTask" />
+
 </LinearLayout>

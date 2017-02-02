@@ -2,6 +2,7 @@ package info.ginpei.androidui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,13 @@ public class MultiThreadingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startAsyncTask();
+            }
+        });
+
+        ((Button) findViewById(R.id.button_handler)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startHandler();
             }
         });
     }
@@ -52,6 +60,21 @@ public class MultiThreadingActivity extends AppCompatActivity {
         task.execute(goal, interval);
 
         System.out.println("Started");
+    }
+
+    private void startHandler() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Run now!");
+            }
+        };
+
+        Handler handler = new Handler();
+        handler.postDelayed(runnable, 1000);
+        // handler.removeCallbacks(runnable);  // cancel
+        System.out.println("Do it later...");
+
     }
 
     class MyAsyncTask extends AsyncTask<Integer, String, Long> {

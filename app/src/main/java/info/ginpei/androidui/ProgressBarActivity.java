@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class ProgressBarActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
 
@@ -16,6 +17,7 @@ public class ProgressBarActivity extends AppCompatActivity implements SeekBar.On
     private ProgressBar horizontalProgressBar;
     private SeekBar normalSeekBar;
     private SeekBar discreteSeekBar;
+    private TextView valueTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,7 @@ public class ProgressBarActivity extends AppCompatActivity implements SeekBar.On
         horizontalProgressBar = (ProgressBar) findViewById(R.id.progressBar_horizontal);
         normalSeekBar = (SeekBar) findViewById(R.id.seekBar_normal);
         discreteSeekBar = (SeekBar) findViewById(R.id.seekBar_discrete);
+        valueTextView = (TextView) findViewById(R.id.textView_value);
 
         normalSeekBar.setOnSeekBarChangeListener(this);
         discreteSeekBar.setOnSeekBarChangeListener(this);
@@ -46,6 +49,15 @@ public class ProgressBarActivity extends AppCompatActivity implements SeekBar.On
     }
 
     private void setValue(int value) {
+        final int max = 10;
+        final int min = 0;
+
+        if (value > max) {
+            value = max;
+        } else if (value < min) {
+            value = min;
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             largeProgressBar.setProgress(value, true);  // doesn't work though
             normalProgressBar.setProgress(value, true);  // doesn't work though
@@ -60,6 +72,12 @@ public class ProgressBarActivity extends AppCompatActivity implements SeekBar.On
             horizontalProgressBar.setProgress(value);
             normalSeekBar.setProgress(value);
             discreteSeekBar.setProgress(value);
+        }
+
+        String sValue = String.valueOf(value);
+        Log.d(TAG, "valueTextView.getText().toString() = " + valueTextView.getText().toString());
+        if (!valueTextView.getText().toString().equals(sValue)) {
+            valueTextView.setText(sValue);
         }
     }
 

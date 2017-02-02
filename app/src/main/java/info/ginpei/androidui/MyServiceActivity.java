@@ -104,10 +104,20 @@ public class MyServiceActivity extends AppCompatActivity {
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setAutoCancel(true);  // remove the notification when the user click it
 
-        // appears popping up
-        builder.setDefaults(Notification.DEFAULT_SOUND);  // set something so that you can make it pop up
+        // appears with sound, vibration, light and popping up
+        builder.setDefaults(
+                Notification.DEFAULT_SOUND
+                        | Notification.DEFAULT_VIBRATE
+                        | Notification.DEFAULT_LIGHTS
+                // or simply: Notification.DEFAULT_ALL
+        );
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            builder.setPriority(Notification.PRIORITY_HIGH);
+            builder.setPriority(Notification.PRIORITY_HIGH);  // it is high priority so appears popping up
+
+            // to pop up, one or more of followings are required:
+            // - sound
+            // - vibration
+            // - light
         }
 
         // call the activity when the user tap the notification

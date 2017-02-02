@@ -17,7 +17,6 @@ public class MyServiceActivity extends AppCompatActivity {
 
     private Button stopServiceButton;
     private Button startServiceButton;
-    private Button stopIntentServiceButton;
     private Button startIntentServiceButton;
 
     @Override
@@ -28,7 +27,6 @@ public class MyServiceActivity extends AppCompatActivity {
         startServiceButton = (Button) findViewById(R.id.button_start);
         stopServiceButton = (Button) findViewById(R.id.button_stop);
         startIntentServiceButton = (Button) findViewById(R.id.button_startIntent);
-        stopIntentServiceButton = (Button) findViewById(R.id.button_stopIntent);
         Button notifyButton = (Button) findViewById(R.id.button_notify);
 
         startServiceButton.setOnClickListener(new View.OnClickListener() {
@@ -50,12 +48,6 @@ public class MyServiceActivity extends AppCompatActivity {
                 startMyIntentService();
             }
         });
-        stopIntentServiceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopMyIntentService();
-            }
-        });
         notifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +57,6 @@ public class MyServiceActivity extends AppCompatActivity {
 
         startServiceButton.setEnabled(true);
         stopServiceButton.setEnabled(false);
-        stopMyIntentService();
     }
 
     public void startMyService() {
@@ -83,17 +74,9 @@ public class MyServiceActivity extends AppCompatActivity {
     }
 
     public void startMyIntentService() {
-        startService(new Intent(this, MyIntentService.class));
-
-        startIntentServiceButton.setEnabled(false);
-        stopIntentServiceButton.setEnabled(true);
-    }
-
-    public void stopMyIntentService() {
-        stopService(new Intent(this, MyIntentService.class));
-
-        startIntentServiceButton.setEnabled(true);
-        stopIntentServiceButton.setEnabled(false);
+        Intent intent = new Intent(this, MyIntentService.class);
+        intent.setAction("info.ginpei.androidui.MyServiceActivity-start");
+        startService(intent);
     }
 
     private void showNotification() {

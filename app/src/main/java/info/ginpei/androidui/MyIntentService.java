@@ -6,7 +6,6 @@ import android.util.Log;
 
 public class MyIntentService extends IntentService {
 
-    public static final String ACTION = "info.ginpei.androidui.ACTION_FOOO";
     public static final String TAG = "MyIntentService";
 
     // a constructor with zero arguments is required (Wow!)

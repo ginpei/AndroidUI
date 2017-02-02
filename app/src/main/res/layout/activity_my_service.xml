@@ -39,12 +39,6 @@
         android:layout_height="wrap_content"
         android:text="Start Intent Service" />
 
-    <Button
-        android:id="@+id/button_stopIntent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Notification" />
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

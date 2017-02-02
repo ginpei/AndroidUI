@@ -80,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_service:
                 startActivity(new Intent(this, MyServiceActivity.class));
                 break;
+
+            case R.id.button_multiThreading:
+                startActivity(new Intent(this, MultiThreadingActivity.class));
+                break;
         }
     }
 }

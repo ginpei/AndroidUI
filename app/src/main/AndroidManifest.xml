@@ -75,6 +75,9 @@
         <activity
             android:name=".MultiThreadingActivity"
             android:label="Multi Threading" />
+        <activity
+            android:name=".PlayMusicActivity"
+            android:label="Play Music" />
     </application>
 
 </manifest>

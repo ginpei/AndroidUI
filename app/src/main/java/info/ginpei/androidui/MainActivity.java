@@ -84,6 +84,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_multiThreading:
                 startActivity(new Intent(this, MultiThreadingActivity.class));
                 break;
+
+            case R.id.button_playMusic:
+                startActivity(new Intent(this, PlayMusicActivity.class));
+                break;
         }
     }
 }

@@ -18,11 +18,14 @@ public class MultiThreadingActivity extends AppCompatActivity {
 
     public static final String ACTION_THREAD_START = "info.ginpei.androidui.MultiThreadingActivity.THREAD_START";
     public static final String ACTION_THREAD_DONE = "info.ginpei.androidui.MultiThreadingActivity.THREAD_DONE";
+    public static final String ACTION_ASYNC_TASK_START = "info.ginpei.androidui.MultiThreadingActivity.ASYNC_TASK_START";
+    public static final String ACTION_ASYNC_TASK_DONE = "info.ginpei.androidui.MultiThreadingActivity.ASYNC_TASK_DONE";
     private Button startThreadButton;
     private Button startAsyncTaskButton;
     private Button startHandlerButton;
     private TextView statusTextView;
     private ProgressBar workingProgressBar;
+    private MyReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +58,29 @@ public class MultiThreadingActivity extends AppCompatActivity {
                 startHandler();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_THREAD_START);
         filter.addAction(ACTION_THREAD_DONE);
-        MyReceiver receiver = new MyReceiver();
+        filter.addAction(ACTION_ASYNC_TASK_START);
+        filter.addAction(ACTION_ASYNC_TASK_DONE);
+        receiver = new MyReceiver();
         registerReceiver(receiver, filter);
 
         setStatusText("Ready.");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        receiver.clearAbortBroadcast();
+        unregisterReceiver(receiver);
     }
 
     private void setStatusText(String text) {
@@ -90,25 +108,11 @@ public class MultiThreadingActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Intent intent = new Intent();
-                intent.setAction(ACTION_THREAD_DONE);
-                intent.putExtra("message", "Hey it's done!");
-                sendBroadcast(intent);
+                sendBroadcast(new Intent(ACTION_THREAD_DONE));
             }
         };
 
         thread.start();
-    }
-
-    private void onThreadStart(Intent intent) {
-        setStatusText("Thread is working...");
-        setWorking(true);
-    }
-
-    private void onThreadDone(Intent intent) {
-        String message = intent.getStringExtra("message");
-        setStatusText("Thread is done! Message from the thread: " + message);
-        setWorking(false);
     }
 
     private void startAsyncTask() {
@@ -116,8 +120,6 @@ public class MultiThreadingActivity extends AppCompatActivity {
         int interval = 500;
         MyAsyncTask task = new MyAsyncTask();
         task.execute(goal, interval);
-
-        System.out.println("Started");
     }
 
     private void startHandler() {
@@ -125,13 +127,17 @@ public class MultiThreadingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 System.out.println("Run now!");
+                setStatusText("Handler is done!");
+                setWorking(false);
             }
         };
 
         Handler handler = new Handler();
         handler.postDelayed(runnable, 1000);
         // handler.removeCallbacks(runnable);  // cancel
-        System.out.println("Do it later...");
+
+        setStatusText("Handler has been set. It do it later...");
+        setWorking(true);
 
     }
 
@@ -141,11 +147,24 @@ public class MultiThreadingActivity extends AppCompatActivity {
             String action = intent.getAction();
             switch (action) {
                 case ACTION_THREAD_START:
-                    onThreadStart(intent);
+                    setStatusText("Thread is working...");
+                    setWorking(true);
                     break;
 
                 case ACTION_THREAD_DONE:
-                    onThreadDone(intent);
+                    String message = intent.getStringExtra("message");
+                    setStatusText("Thread is done!");
+                    setWorking(false);
+                    break;
+
+                case ACTION_ASYNC_TASK_START:
+                    setStatusText("AsyncTask is working...");
+                    setWorking(true);
+                    break;
+
+                case ACTION_ASYNC_TASK_DONE:
+                    setStatusText("AsyncTask is done!");
+                    setWorking(false);
                     break;
             }
         }
@@ -157,6 +176,7 @@ public class MultiThreadingActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            sendBroadcast(new Intent(ACTION_ASYNC_TASK_START));
             Log.d(TAG, "onPreExecute");
         }
 
@@ -166,25 +186,26 @@ public class MultiThreadingActivity extends AppCompatActivity {
             Integer interval = params[1];
             for (int i = 0; i < goal; i++) {
                 try {
-                    System.out.println(i);
+                    publishProgress("i=" + i);
                     Thread.sleep(interval);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            System.out.println("Done!");
-            publishProgress();
+            Log.d(TAG, "doInBackground: Done!");
 
             return 0L;
         }
 
         @Override
         protected void onProgressUpdate(String... values) {
-            Log.d(TAG, "onProgressUpdate");
+            String message = values[0];
+            Log.d(TAG, "onProgressUpdate: " + message);
         }
 
         @Override
         protected void onPostExecute(Long aLong) {
+            sendBroadcast(new Intent(ACTION_ASYNC_TASK_DONE));
             Log.d(TAG, "onPostExecute");
         }
     }

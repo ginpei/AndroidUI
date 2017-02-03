@@ -14,11 +14,14 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 public class MultiThreadingActivity extends AppCompatActivity {
 
     public static final String ACTION_THREAD_START = "info.ginpei.androidui.MultiThreadingActivity.THREAD_START";
     public static final String ACTION_THREAD_DONE = "info.ginpei.androidui.MultiThreadingActivity.THREAD_DONE";
     public static final String ACTION_ASYNC_TASK_START = "info.ginpei.androidui.MultiThreadingActivity.ASYNC_TASK_START";
+    public static final String ACTION_ASYNC_TASK_PROGRESS = "info.ginpei.androidui.MultiThreadingActivity.ASYNC_TASK_PROGRESS";
     public static final String ACTION_ASYNC_TASK_DONE = "info.ginpei.androidui.MultiThreadingActivity.ASYNC_TASK_DONE";
     private Button startThreadButton;
     private Button startAsyncTaskButton;
@@ -68,6 +71,7 @@ public class MultiThreadingActivity extends AppCompatActivity {
         filter.addAction(ACTION_THREAD_START);
         filter.addAction(ACTION_THREAD_DONE);
         filter.addAction(ACTION_ASYNC_TASK_START);
+        filter.addAction(ACTION_ASYNC_TASK_PROGRESS);
         filter.addAction(ACTION_ASYNC_TASK_DONE);
         receiver = new MyReceiver();
         registerReceiver(receiver, filter);
@@ -117,7 +121,7 @@ public class MultiThreadingActivity extends AppCompatActivity {
 
     private void startAsyncTask() {
         int goal = 10;
-        int interval = 500;
+        int interval = 200;
         MyAsyncTask task = new MyAsyncTask();
         task.execute(goal, interval);
     }
@@ -162,6 +166,15 @@ public class MultiThreadingActivity extends AppCompatActivity {
                     setWorking(true);
                     break;
 
+                case ACTION_ASYNC_TASK_PROGRESS:
+                    Log.d("AAA", "PROGRESS");
+                    setStatusText(String.format(Locale.ENGLISH,
+                            "AsyncTask is working... (Progress=%d/%d)",
+                            intent.getLongExtra("progress", -1),
+                            intent.getLongExtra("max", -1)
+                    ));
+                    break;
+
                 case ACTION_ASYNC_TASK_DONE:
                     setStatusText("AsyncTask is done!");
                     setWorking(false);
@@ -170,7 +183,7 @@ public class MultiThreadingActivity extends AppCompatActivity {
         }
     }
 
-    class MyAsyncTask extends AsyncTask<Integer, String, Long> {
+    class MyAsyncTask extends AsyncTask<Integer, Long, Void> {
 
         public static final String TAG = "MyAsyncTask";
 
@@ -181,12 +194,12 @@ public class MultiThreadingActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Long doInBackground(Integer... params) {
+        protected Void doInBackground(Integer... params) {
             Integer goal = params[0];
             Integer interval = params[1];
             for (int i = 0; i < goal; i++) {
                 try {
-                    publishProgress("i=" + i);
+                    publishProgress((long) i, (long) goal);
                     Thread.sleep(interval);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -194,17 +207,24 @@ public class MultiThreadingActivity extends AppCompatActivity {
             }
             Log.d(TAG, "doInBackground: Done!");
 
-            return 0L;
+            return null;
         }
 
         @Override
-        protected void onProgressUpdate(String... values) {
-            String message = values[0];
-            Log.d(TAG, "onProgressUpdate: " + message);
+        protected void onProgressUpdate(Long... values) {
+            Long progress = values[0];
+            Long max = values[1];
+
+            Log.d(TAG, "onProgressUpdate: progress = " + progress);
+
+            Intent intent = new Intent(ACTION_ASYNC_TASK_PROGRESS);
+            intent.putExtra("progress", progress);
+            intent.putExtra("max", max);
+            sendBroadcast(intent);
         }
 
         @Override
-        protected void onPostExecute(Long aLong) {
+        protected void onPostExecute(Void aVoid) {
             sendBroadcast(new Intent(ACTION_ASYNC_TASK_DONE));
             Log.d(TAG, "onPostExecute");
         }

@@ -1,5 +1,9 @@
 package info.ginpei.androidui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +13,9 @@ import android.view.View;
 import android.widget.Button;
 
 public class MultiThreadingActivity extends AppCompatActivity {
+
+    public static final String ACTION_THREAD_START = "info.ginpei.androidui.MultiThreadingActivity.THREAD_START";
+    public static final String ACTION_THREAD_DONE = "info.ginpei.androidui.MultiThreadingActivity.THREAD_DONE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +42,43 @@ public class MultiThreadingActivity extends AppCompatActivity {
                 startHandler();
             }
         });
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_THREAD_START);
+        filter.addAction(ACTION_THREAD_DONE);
+        MyReceiver receiver = new MyReceiver();
+        registerReceiver(receiver, filter);
     }
 
     private void startThread() {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                for (int i = 0; i < 300000000; i++) {
-                    if (i % 10000000 == 0) {
-                        System.out.println(i);
-                    }
+                sendBroadcast(new Intent(ACTION_THREAD_START));
+
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                System.out.println("Done!");
+
+                Intent intent = new Intent();
+                intent.setAction(ACTION_THREAD_DONE);
+                intent.putExtra("message", "Hey it's done!");
+                sendBroadcast(intent);
             }
         };
 
         thread.start();
+    }
+
+    private void onThreadStart(Intent intent) {
+        System.out.println("Thread is started!");
+    }
+
+    private void onThreadDone(Intent intent) {
+        String message = intent.getStringExtra("message");
+        System.out.println("Thread is done! message=" + message);
     }
 
     private void startAsyncTask() {
@@ -75,6 +103,22 @@ public class MultiThreadingActivity extends AppCompatActivity {
         // handler.removeCallbacks(runnable);  // cancel
         System.out.println("Do it later...");
 
+    }
+
+    class MyReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch (action) {
+                case ACTION_THREAD_START:
+                    onThreadStart(intent);
+                    break;
+
+                case ACTION_THREAD_DONE:
+                    onThreadDone(intent);
+                    break;
+            }
+        }
     }
 
     class MyAsyncTask extends AsyncTask<Integer, String, Long> {

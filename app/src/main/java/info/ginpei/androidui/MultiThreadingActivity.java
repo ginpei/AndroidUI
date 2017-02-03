@@ -11,32 +11,45 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class MultiThreadingActivity extends AppCompatActivity {
 
     public static final String ACTION_THREAD_START = "info.ginpei.androidui.MultiThreadingActivity.THREAD_START";
     public static final String ACTION_THREAD_DONE = "info.ginpei.androidui.MultiThreadingActivity.THREAD_DONE";
+    private Button startThreadButton;
+    private Button startAsyncTaskButton;
+    private Button startHandlerButton;
+    private TextView statusTextView;
+    private ProgressBar workingProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_threading);
 
-        ((Button) findViewById(R.id.button_startThread)).setOnClickListener(new View.OnClickListener() {
+        statusTextView = (TextView) findViewById(R.id.textView_status);
+        workingProgressBar = (ProgressBar) findViewById(R.id.progressBar_working);
+        startThreadButton = (Button) findViewById(R.id.button_startThread);
+        startAsyncTaskButton = (Button) findViewById(R.id.button_startAsyncTask);
+        startHandlerButton = (Button) findViewById(R.id.button_startHandler);
+
+        startThreadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startThread();
             }
         });
 
-        ((Button) findViewById(R.id.button_startAsyncTask)).setOnClickListener(new View.OnClickListener() {
+        startAsyncTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startAsyncTask();
             }
         });
 
-        ((Button) findViewById(R.id.button_startHandler)).setOnClickListener(new View.OnClickListener() {
+        startHandlerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startHandler();
@@ -48,6 +61,21 @@ public class MultiThreadingActivity extends AppCompatActivity {
         filter.addAction(ACTION_THREAD_DONE);
         MyReceiver receiver = new MyReceiver();
         registerReceiver(receiver, filter);
+
+        setStatusText("Ready.");
+    }
+
+    private void setStatusText(String text) {
+        statusTextView.setText(text);
+    }
+
+    private void setWorking(boolean working) {
+        workingProgressBar.setVisibility(working ? View.VISIBLE : View.INVISIBLE);
+
+        boolean enabled = !working;
+        startThreadButton.setEnabled(enabled);
+        startAsyncTaskButton.setEnabled(enabled);
+        startHandlerButton.setEnabled(enabled);
     }
 
     private void startThread() {
@@ -73,12 +101,14 @@ public class MultiThreadingActivity extends AppCompatActivity {
     }
 
     private void onThreadStart(Intent intent) {
-        System.out.println("Thread is started!");
+        setStatusText("Thread is working...");
+        setWorking(true);
     }
 
     private void onThreadDone(Intent intent) {
         String message = intent.getStringExtra("message");
-        System.out.println("Thread is done! message=" + message);
+        setStatusText("Thread is done! Message from the thread: " + message);
+        setWorking(false);
     }
 
     private void startAsyncTask() {

@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -22,7 +21,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     private ToggleButton playPauseToggleButton;
     private AsyncTask ticker;
     private BroadcastReceiver receiver;
-    private boolean receiverRegistered = false;
+    private boolean rickerRunning = false;
     private TextView progressTextView;
     private TextView durationTextView;
 
@@ -55,6 +54,20 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     private void buildTicker() {
+        initTicker();
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals(ACTION_TICK)) {
+                    updateCurrentPosition();
+                }
+            }
+        };
+    }
+
+    private void initTicker() {
         ticker = new AsyncTask() {
             @Override
             protected Void doInBackground(Object... values) {
@@ -66,16 +79,6 @@ public class PlayMusicActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
-            }
-        };
-
-        receiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-                if (action.equals(ACTION_TICK)) {
-                    updateCurrentPosition();
                 }
             }
         };
@@ -109,16 +112,22 @@ public class PlayMusicActivity extends AppCompatActivity {
     }
 
     private void startTicker() {
-        ticker.execute();
         registerReceiver(receiver, new IntentFilter(ACTION_TICK));
-        receiverRegistered = true;
+
+        initTicker();
+        ticker.execute();
+
+        rickerRunning = true;
     }
 
     private void stopTicker() {
-        if (receiverRegistered) {
+        if (rickerRunning) {
             unregisterReceiver(receiver);
+
             ticker.cancel(true);
-            receiverRegistered = false;
+            ticker = null;
+
+            rickerRunning = false;
         }
     }
 }

@@ -22,6 +22,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     private ToggleButton playPauseToggleButton;
     private AsyncTask ticker;
     private BroadcastReceiver receiver;
+    private boolean receiverRegistered = false;
     private TextView progressTextView;
     private TextView durationTextView;
     private SeekBar progressSeekBar;
@@ -114,11 +115,14 @@ public class PlayMusicActivity extends AppCompatActivity {
     private void startTicker() {
         ticker.execute();
         registerReceiver(receiver, new IntentFilter(ACTION_TICK));
+        receiverRegistered = true;
     }
 
     private void stopTicker() {
-        unregisterReceiver(receiver);
-        ticker.cancel(true);
-        receiverRegistered = false;
+        if (receiverRegistered) {
+            unregisterReceiver(receiver);
+            ticker.cancel(true);
+            receiverRegistered = false;
+        }
     }
 }

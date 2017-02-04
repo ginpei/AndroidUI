@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -23,6 +24,7 @@ public class PlayMusicActivity extends AppCompatActivity {
     private BroadcastReceiver receiver;
     private TextView progressTextView;
     private TextView durationTextView;
+    private SeekBar progressSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class PlayMusicActivity extends AppCompatActivity {
         playPauseToggleButton = (ToggleButton) findViewById(R.id.button_playPause);
         progressTextView = (TextView) findViewById(R.id.textView_progress);
         durationTextView = (TextView) findViewById(R.id.textView_duration);
+        progressSeekBar = (SeekBar) findViewById(R.id.seekBar_progress);
 
         playPauseToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -47,6 +50,9 @@ public class PlayMusicActivity extends AppCompatActivity {
                 }
             }
         });
+
+        updateCurrentPosition();
+        updateDuration();
     }
 
     private void buildTicker() {
@@ -70,7 +76,7 @@ public class PlayMusicActivity extends AppCompatActivity {
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
                 if (action.equals(ACTION_TICK)) {
-                    updateProgress();
+                    updateCurrentPosition();
                 }
             }
         };
@@ -84,13 +90,25 @@ public class PlayMusicActivity extends AppCompatActivity {
 
     private void play() {
         mediaPlayer.start();
-        durationTextView.setText(String.valueOf(mediaPlayer.getDuration()));
+        updateDuration();
         startTicker();
     }
 
     private void pause() {
         mediaPlayer.pause();
         stopTicker();
+    }
+
+    private void updateCurrentPosition() {
+        int progress = mediaPlayer.getCurrentPosition();
+        progressSeekBar.setProgress(progress);
+        progressTextView.setText(String.valueOf(progress));
+    }
+
+    private void updateDuration() {
+        int duration = mediaPlayer.getDuration();
+        progressSeekBar.setMax(duration);
+        durationTextView.setText(String.valueOf(duration));
     }
 
     private void startTicker() {
@@ -101,9 +119,6 @@ public class PlayMusicActivity extends AppCompatActivity {
     private void stopTicker() {
         unregisterReceiver(receiver);
         ticker.cancel(true);
-    }
-
-    private void updateProgress() {
-        progressTextView.setText(String.valueOf(mediaPlayer.getCurrentPosition()));
+        receiverRegistered = false;
     }
 }

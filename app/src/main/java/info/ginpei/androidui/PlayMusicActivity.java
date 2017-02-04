@@ -25,7 +25,6 @@ public class PlayMusicActivity extends AppCompatActivity {
     private boolean receiverRegistered = false;
     private TextView progressTextView;
     private TextView durationTextView;
-    private SeekBar progressSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,6 @@ public class PlayMusicActivity extends AppCompatActivity {
         playPauseToggleButton = (ToggleButton) findViewById(R.id.button_playPause);
         progressTextView = (TextView) findViewById(R.id.textView_progress);
         durationTextView = (TextView) findViewById(R.id.textView_duration);
-        progressSeekBar = (SeekBar) findViewById(R.id.seekBar_progress);
 
         playPauseToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -102,14 +100,12 @@ public class PlayMusicActivity extends AppCompatActivity {
 
     private void updateCurrentPosition() {
         int progress = mediaPlayer.getCurrentPosition();
-        progressSeekBar.setProgress(progress);
-        progressTextView.setText(String.valueOf(progress));
+        progressTextView.setText(String.valueOf(progress / 1000));
     }
 
     private void updateDuration() {
         int duration = mediaPlayer.getDuration();
-        progressSeekBar.setMax(duration);
-        durationTextView.setText(String.valueOf(duration));
+        durationTextView.setText(String.valueOf(duration / 1000));
     }
 
     private void startTicker() {

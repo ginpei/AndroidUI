@@ -16,7 +16,7 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <Button
-            android:id="@+id/button_text_to_speech"
+            android:id="@+id/button_textToSpeech"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClick"

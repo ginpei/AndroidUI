@@ -21,6 +21,9 @@
             android:name=".TextToSpeechActivity"
             android:label="Text to Speech" />
         <activity
+            android:name=".TextToSpeechInThreadActivity"
+            android:label="Text to Speech in Thread" />
+        <activity
             android:name=".SpinnerActivity"
             android:label="Spinner UI" />
         <activity

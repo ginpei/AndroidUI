@@ -41,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, TextToSpeechActivity.class));
                 break;
 
+            case R.id.button_textToSpeechInThread:
+                startActivity(new Intent(this, TextToSpeechInThreadActivity.class));
+                break;
+
             case R.id.button_voice_recognition:
                 startActivity(new Intent(this, VoiceRecognitionActivity.class));
                 break;

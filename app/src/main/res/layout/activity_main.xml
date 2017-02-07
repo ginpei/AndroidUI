@@ -23,6 +23,13 @@
             android:text="Text to Speech" />
 
         <Button
+            android:id="@+id/button_textToSpeechInThread"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="Text to Speech (Thread)" />
+
+        <Button
             android:id="@+id/button_voice_recognition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

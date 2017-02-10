@@ -1,17 +1,18 @@
 package info.ginpei.androidui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.SocketException;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class FetchHttpActivity extends AppCompatActivity {
 
@@ -36,15 +37,16 @@ public class FetchHttpActivity extends AppCompatActivity {
             public void run() {
                 String urlString = "https://www.wikipedia.org/";
                 Log.d(TAG, "Start fetching... for " + urlString);
-                fetch(urlString);
-                Log.d(TAG, "Fetched!");
+                String result = fetch(urlString);
+                Log.d(TAG, "Fetched! result=" + result);
             }
         };
 
         thread.start();
     }
 
-    private void fetch(String urlString) {
+    private String fetch(String urlString) {
+        String result = null;
         try {
             // fetch
             URL url = new URL(urlString);
@@ -56,24 +58,23 @@ public class FetchHttpActivity extends AppCompatActivity {
                 connection.disconnect();
             }
 
-            // read (in low layer)
-            final int cbufLength = 128;
-            char[] cbuf = new char[cbufLength];
-            InputStreamReader reader = new InputStreamReader(in);
+            // read
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder builder = new StringBuilder();
             try {
-                for (int i = 0; true; i++) {
-                    int result = reader.read(cbuf, 0, cbufLength);
-                    Log.d(TAG, "@" + (i * cbufLength) + " Read: " + String.valueOf(cbuf));
-                    if (result < 0) {
-                        break;
-                    }
+                for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+                    Log.d(TAG, "line=" + line);
+                    builder.append(line);
+                    builder.append("\n");
                 }
-            } catch (IOException e) {
-                Log.d(TAG, "IOException at somewhere!");
+            } catch (SocketException e) {
                 e.printStackTrace();
             }
+            result = builder.toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return result;
     }
 }

@@ -85,6 +85,9 @@
         <activity
             android:name=".FetchHttpActivity"
             android:label="Fetch HTTP" />
+        <activity
+            android:name=".OrmaActivity"
+            android:label="Android Orma" />
     </application>
 
 </manifest>

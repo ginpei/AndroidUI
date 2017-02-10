@@ -96,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_fetchHttp:
                 startActivity(new Intent(this, FetchHttpActivity.class));
                 break;
+
+            case R.id.button_orma:
+                startActivity(new Intent(this, OrmaActivity.class));
+                break;
         }
     }
 }

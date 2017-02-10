@@ -39,7 +39,7 @@ public class FetchHttpActivity extends AppCompatActivity {
                 String urlString = "https://www.wikipedia.org/";
                 Log.d(TAG, "Start fetching... for " + urlString);
                 final String result = fetch(urlString);
-                Log.d(TAG, "Fetched! result=" + result);
+                Log.d(TAG, "Fetched! result.length=" + result.length());
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -59,19 +59,15 @@ public class FetchHttpActivity extends AppCompatActivity {
             // fetch
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            InputStream in;
-            try {
-                in = new BufferedInputStream(connection.getInputStream());
-            } finally {
-                connection.disconnect();
-            }
+            InputStreamReader in = new InputStreamReader(connection.getInputStream());
 
             // read
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            BufferedReader reader = new BufferedReader(in);
             StringBuilder builder = new StringBuilder();
+            Log.d(TAG, "Start reading...");
             try {
                 for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                    Log.d(TAG, "line=" + line);
+//                    Log.d(TAG, "line=" + line);
                     builder.append(line);
                     builder.append("\n");
                 }
@@ -79,6 +75,7 @@ public class FetchHttpActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             result = builder.toString();
+            Log.d(TAG, "Read.");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -37,8 +38,15 @@ public class FetchHttpActivity extends AppCompatActivity {
             public void run() {
                 String urlString = "https://www.wikipedia.org/";
                 Log.d(TAG, "Start fetching... for " + urlString);
-                String result = fetch(urlString);
+                final String result = fetch(urlString);
                 Log.d(TAG, "Fetched! result=" + result);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView) findViewById(R.id.textView_result)).setText(result);
+                    }
+                });
             }
         };
 

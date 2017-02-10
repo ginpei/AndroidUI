@@ -112,5 +112,12 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"
             android:text="Play Music" />
+
+        <Button
+            android:id="@+id/button_fetchHttp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="Fetch HTTP" />
     </LinearLayout>
 </ScrollView>

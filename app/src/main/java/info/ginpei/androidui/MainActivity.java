@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_playMusic:
                 startActivity(new Intent(this, PlayMusicActivity.class));
                 break;
+
+            case R.id.button_fetchHttp:
+                startActivity(new Intent(this, FetchHttpActivity.class));
+                break;
         }
     }
 }

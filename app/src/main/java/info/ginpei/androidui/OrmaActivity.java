@@ -17,6 +17,7 @@ import com.github.gfx.android.orma.annotation.Table;
 import com.github.gfx.android.orma.exception.NoValueException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class OrmaActivity extends AppCompatActivity {
@@ -82,7 +83,13 @@ public class OrmaActivity extends AppCompatActivity {
 
                 View view = super.getView(position, convertView, parent);
                 ((TextView) view.findViewById(android.R.id.text1)).setText("#" + entry.id + " " + entry.title);
-                ((TextView) view.findViewById(android.R.id.text2)).setText(entry.content);
+                String subText;
+                if (entry.updatedAt != null) {
+                    subText = entry.updatedAt.toString();
+                } else {
+                    subText = "(null)";
+                }
+                ((TextView) view.findViewById(android.R.id.text2)).setText(subText);
                 return view;
             }
         };
@@ -136,7 +143,8 @@ public class OrmaActivity extends AppCompatActivity {
             return;
         }
 
-        lastEntry.content = "Updated!";
+        lastEntry.title = "Updated!";
+        lastEntry.updateUpdateAt();
 
         Log.d(TAG, "Updating...");
         new Thread() {
@@ -144,7 +152,8 @@ public class OrmaActivity extends AppCompatActivity {
             public void run() {
                 orma.updateEntry()
                         .idEq(lastEntry.id)
-                        .content(lastEntry.content)
+                        .title(lastEntry.title)
+                        .updatedAt(lastEntry.updatedAt)
                         .execute();
                 Log.d(TAG, "Done updating.");
             }
@@ -186,11 +195,23 @@ public class OrmaActivity extends AppCompatActivity {
         @PrimaryKey(autoincrement = true)
         public long id;
 
-        @Column(indexed = true)
-        public String title;
+        @Column
+        @Nullable
+        public Date createdAt;
 
         @Column
         @Nullable
-        public String content;
+        public Date updatedAt;
+
+        @Column(indexed = true)
+        public String title;
+
+        public Entry() {
+            createdAt = updatedAt = new Date();
+        }
+
+        public Date updateUpdateAt() {
+            return updatedAt = new Date();
+        }
     }
 }

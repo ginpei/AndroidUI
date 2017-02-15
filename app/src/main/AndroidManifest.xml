@@ -88,6 +88,9 @@
         <activity
             android:name=".OrmaActivity"
             android:label="Android Orma" />
+        <activity
+            android:name=".LocationActivity"
+            android:label="Location" />
     </application>
 
 </manifest>

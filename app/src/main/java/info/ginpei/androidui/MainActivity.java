@@ -100,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_orma:
                 startActivity(new Intent(this, OrmaActivity.class));
                 break;
+
+            case R.id.button_location:
+                startActivity(new Intent(this, LocationActivity.class));
+                break;
         }
     }
 }

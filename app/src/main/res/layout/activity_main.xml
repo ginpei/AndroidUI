@@ -126,5 +126,12 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"
             android:text="Orma" />
+
+        <Button
+            android:id="@+id/button_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="Location" />
     </LinearLayout>
 </ScrollView>

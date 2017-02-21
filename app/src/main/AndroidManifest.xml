@@ -92,6 +92,9 @@
         <activity
             android:name=".LocationActivity"
             android:label="Location" />
+        <activity
+            android:name=".DataBindingActivity"
+            android:label="Data Binding" />
     </application>
 
 </manifest>

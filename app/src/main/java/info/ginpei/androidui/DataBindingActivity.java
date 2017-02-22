@@ -44,5 +44,9 @@ public class DataBindingActivity extends AppCompatActivity {
             this.message = message;
             notifyPropertyChanged(BR.message);
         }
+
+        public void message_textChanged(CharSequence charSequence, int i, int i1, int i2) {
+            setMessage(charSequence.toString());
+        }
     }
 }

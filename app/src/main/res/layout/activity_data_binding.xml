@@ -23,6 +23,12 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context="info.ginpei.androidui.DataBindingActivity">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onTextChanged="@{vm.message_textChanged}"
+            android:text="@{vm.message}" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

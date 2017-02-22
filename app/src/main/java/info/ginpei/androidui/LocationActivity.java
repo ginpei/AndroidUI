@@ -12,6 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +22,6 @@ public class LocationActivity extends AppCompatActivity {
     public static final int REQ_LOCATION_FROM_UPDATE = 1;
     public static final String TAG = "G#LocationActivity";
     private LocationManager manager;
-    private boolean askedForPermission = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +29,13 @@ public class LocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_location);
 
         manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        updateLocation();
+        ((Button) findViewById(R.id.button_update)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateLocation();
+            }
+        });
     }
 
     /**
@@ -46,9 +47,13 @@ public class LocationActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQ_LOCATION_FROM_UPDATE:
-                // Call again so that getting location success if granted,
-                // otherwise it shows a message for the permission.
-                updateLocation();
+                Log.d(TAG, "onRequestPermissionsResult: grantResults[0]=" + grantResults[0]);
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Call again so that getting location success now
+                    updateLocation();
+                } else {
+                    Toast.makeText(this, "Please allow location access.", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             default:
@@ -105,13 +110,10 @@ public class LocationActivity extends AppCompatActivity {
         final String permissionName = Manifest.permission.ACCESS_FINE_LOCATION;
 
         boolean shouldAskNow = ActivityCompat.shouldShowRequestPermissionRationale(this, permissionName);
-        Log.d(TAG, "requestLocationPermission: App should request? " + shouldAskNow + ". Already asked here? " + askedForPermission);
+        Log.d(TAG, "requestLocationPermission: App should request? " + shouldAskNow);
 
-        if (shouldAskNow && !askedForPermission) {
+        if (shouldAskNow) {
             ActivityCompat.requestPermissions(this, new String[]{permissionName}, requestCode);
-            askedForPermission = true;
-        } else {
-            Toast.makeText(this, "Please allow location access.", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -5,88 +5,87 @@ package info.ginpei.androidui;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
+public class LocationActivity extends AppCompatActivity {
 
-public class LocationActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
+    public static final int REQ_LOCATION_FROM_UPDATE = 1;
     public static final String TAG = "G#LocationActivity";
-    private GoogleApiClient googleApiClient = null;
+    private LocationManager manager;
+    private boolean askedForPermission = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        getPermission();
+        manager = (LocationManager) getSystemService(LOCATION_SERVICE);
     }
 
     @Override
-    protected void onStart() {
-        Log.d(TAG, "onStart");
-        googleApiClient.connect();
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+
+        updateLocation();
     }
 
     @Override
-    protected void onStop() {
-        Log.d(TAG, "onStop");
-        googleApiClient.disconnect();
-        super.onStop();
-    }
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQ_LOCATION_FROM_UPDATE:
+                updateLocation();
+                break;
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.d(TAG, "onConnected");
-
-        Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if (lastLocation != null) {
-            double latitude = lastLocation.getLatitude();
-            double longitude = lastLocation.getLongitude();
-            Log.d(TAG, "Latitude=" + latitude + ", Longitute=" + longitude);
-
-            ((TextView) findViewById(R.id.textView_latitude)).setText(String.valueOf(latitude));
-            ((TextView) findViewById(R.id.textView_longitude)).setText(String.valueOf(longitude));
-        } else {
-            Log.w(TAG, "Failed to get the last location.");
-            Toast.makeText(this, "Failed to get the last location.", Toast.LENGTH_SHORT).show();
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
-    @Override
-    public void onConnectionSuspended(int cause) {
-        Log.d(TAG, "onConnectionSuspended. cause=" + cause);
+    private void updateLocation() {
+        Location location = getLocation();
+        Log.d(TAG, "updateLocation: location null? " + (location == null));
+        if (location == null) {
+            requestLocationPermission(REQ_LOCATION_FROM_UPDATE);
+            return;
+        }
+
+        renderLocation(location);
     }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d(TAG, "onConnectionFailed. Error message=" + connectionResult.getErrorMessage());
+    private void renderLocation(Location location) {
+        ((TextView) findViewById(R.id.textView_latitude)).setText(String.valueOf(location.getLatitude()));
+        ((TextView) findViewById(R.id.textView_longitude)).setText(String.valueOf(location.getLongitude()));
     }
 
+    @Nullable
+    private Location getLocation() {
+        final String permissionName = Manifest.permission.ACCESS_FINE_LOCATION;
+        if (ActivityCompat.checkSelfPermission(this, permissionName) == PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "getLocation: Yes, granted.");
+            return manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        } else {
+            Log.d(TAG, "getLocation: Not granted.");
+            return null;
+        }
+    }
 
-    private void getPermission() {
-        String permission = Manifest.permission.ACCESS_COARSE_LOCATION;
-
-        int permittedStatus = ContextCompat.checkSelfPermission(this, permission);
-        if (permittedStatus != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                ActivityCompat.requestPermissions(this, new String[]{permission}, 1);
-            }
+    private void requestLocationPermission(int requestCode) {
+        final String permissionName = Manifest.permission.ACCESS_FINE_LOCATION;
+        boolean shouldAskNow = ActivityCompat.shouldShowRequestPermissionRationale(this, permissionName);
+        Log.d(TAG, "requestLocationPermission: App should request? " + shouldAskNow + ". Already asked here? " + askedForPermission);
+        if (shouldAskNow && !askedForPermission) {
+            ActivityCompat.requestPermissions(this, new String[]{permissionName}, requestCode);
+            askedForPermission = true;
+        } else {
+            Toast.makeText(this, "Please allow location access.", Toast.LENGTH_SHORT).show();
         }
     }
 }

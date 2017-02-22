@@ -37,10 +37,17 @@ public class LocationActivity extends AppCompatActivity {
         updateLocation();
     }
 
+    /**
+     * Called when the user allows or denies a permission.
+     *
+     * @see android.support.v4.app.FragmentActivity#onRequestPermissionsResult(int, String[], int[])
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQ_LOCATION_FROM_UPDATE:
+                // Call again so that getting location success if granted,
+                // otherwise it shows a message for the permission.
                 updateLocation();
                 break;
 
@@ -49,9 +56,13 @@ public class LocationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Play with location.
+     */
     private void updateLocation() {
         Location location = getLocation();
         Log.d(TAG, "updateLocation: location null? " + (location == null));
+
         if (location == null) {
             requestLocationPermission(REQ_LOCATION_FROM_UPDATE);
             return;
@@ -65,9 +76,16 @@ public class LocationActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.textView_longitude)).setText(String.valueOf(location.getLongitude()));
     }
 
+    /**
+     * Return last known location.
+     * If the permission is not granted, return null.
+     *
+     * @return Location if the permission is granted. Otherwise, null.
+     */
     @Nullable
     private Location getLocation() {
         final String permissionName = Manifest.permission.ACCESS_FINE_LOCATION;
+
         if (ActivityCompat.checkSelfPermission(this, permissionName) == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "getLocation: Yes, granted.");
             return manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -77,10 +95,18 @@ public class LocationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Request the permission.
+     * If already asked, show a message for the permission instead.
+     *
+     * @param requestCode Request code which shared in {@link #onRequestPermissionsResult}.
+     */
     private void requestLocationPermission(int requestCode) {
         final String permissionName = Manifest.permission.ACCESS_FINE_LOCATION;
+
         boolean shouldAskNow = ActivityCompat.shouldShowRequestPermissionRationale(this, permissionName);
         Log.d(TAG, "requestLocationPermission: App should request? " + shouldAskNow + ". Already asked here? " + askedForPermission);
+
         if (shouldAskNow && !askedForPermission) {
             ActivityCompat.requestPermissions(this, new String[]{permissionName}, requestCode);
             askedForPermission = true;

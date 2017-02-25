@@ -12,7 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.github.gfx.android.orma.annotation.Column;
+import com.github.gfx.android.orma.annotation.Getter;
 import com.github.gfx.android.orma.annotation.PrimaryKey;
+import com.github.gfx.android.orma.annotation.Setter;
 import com.github.gfx.android.orma.annotation.Table;
 import com.github.gfx.android.orma.exception.NoValueException;
 
@@ -82,7 +84,7 @@ public class OrmaActivity extends AppCompatActivity {
                 Entry entry = entries.get(position);
 
                 View view = super.getView(position, convertView, parent);
-                ((TextView) view.findViewById(android.R.id.text1)).setText("#" + entry.id + " " + entry.title);
+                ((TextView) view.findViewById(android.R.id.text1)).setText("#" + entry.id + " " + entry.getTitle());
                 String subText;
                 if (entry.updatedAt != null) {
                     subText = entry.updatedAt.toString();
@@ -99,7 +101,7 @@ public class OrmaActivity extends AppCompatActivity {
 
     private void insertEntry() {
         final Entry entry = new Entry();
-        entry.title = "Hello World!";
+        entry.setTitle("Hello World!");
 
         Log.d(TAG, "Inserting...");
         new Thread() {
@@ -143,7 +145,7 @@ public class OrmaActivity extends AppCompatActivity {
             return;
         }
 
-        lastEntry.title = "Updated!";
+        lastEntry.setTitle("Updated!");
         lastEntry.updateUpdateAt();
 
         Log.d(TAG, "Updating...");
@@ -152,7 +154,7 @@ public class OrmaActivity extends AppCompatActivity {
             public void run() {
                 orma.updateEntry()
                         .idEq(lastEntry.id)
-                        .title(lastEntry.title)
+                        .title(lastEntry.getTitle())
                         .updatedAt(lastEntry.updatedAt)
                         .execute();
                 Log.d(TAG, "Done updating.");
@@ -204,7 +206,19 @@ public class OrmaActivity extends AppCompatActivity {
         public Date updatedAt;
 
         @Column(indexed = true)
-        public String title;
+        @NonNull
+        private String title;
+
+        @Getter
+        public String getTitle() {
+            return title;
+        }
+
+        @Setter
+        public void setTitle(String title) {
+            Log.d(TAG, "setTitle() called with: title = [" + title + "] <- " + this.title);
+            this.title = title;
+        }
 
         public Entry() {
             createdAt = updatedAt = new Date();

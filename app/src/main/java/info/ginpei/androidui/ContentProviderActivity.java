@@ -8,6 +8,11 @@ import android.widget.TextView;
 
 public class ContentProviderActivity extends AppCompatActivity {
 
+    private final String[] projection = new String[]{
+            ContactsContract.Contacts.DISPLAY_NAME,
+            ContactsContract.Contacts.HAS_PHONE_NUMBER,
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,7 +20,7 @@ public class ContentProviderActivity extends AppCompatActivity {
 
         Cursor cursor = getContentResolver().query(
                 ContactsContract.Contacts.CONTENT_URI,
-                null,
+                projection,
                 null,
                 null,
                 null
@@ -27,12 +32,13 @@ public class ContentProviderActivity extends AppCompatActivity {
             while (cursor.moveToNext()) {
                 builder
                         .append("- ")
-                        .append(cursor.getString(0))
-                        .append(", ")
-                        .append(cursor.getString(1))
-                        .append(", ")
-                        .append(cursor.getString(2))
-                        .append("\n");
+                        .append(cursor.getString(0));
+
+                if (cursor.getInt(1) == 0) {
+                    builder.append(" (No phone numbers)");
+                }
+
+                builder.append("\n");
             }
             text = builder.toString();
 

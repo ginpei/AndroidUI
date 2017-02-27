@@ -140,5 +140,12 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"
             android:text="Data Binding" />
+
+        <Button
+            android:id="@+id/button_contentProvider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="Content Provider" />
     </LinearLayout>
 </ScrollView>

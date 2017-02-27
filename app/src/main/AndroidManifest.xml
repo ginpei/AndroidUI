@@ -95,6 +95,9 @@
         <activity
             android:name=".DataBindingActivity"
             android:label="Data Binding" />
+        <activity
+            android:name=".ContentProviderActivity"
+            android:label="Content Provider" />
     </application>
 
 </manifest>

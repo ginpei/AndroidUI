@@ -108,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_dataBinding:
                 startActivity(new Intent(this, DataBindingActivity.class));
                 break;
+
+            case R.id.button_contentProvider:
+                startActivity(new Intent(this, ContentProviderActivity.class));
+                break;
         }
     }
 }

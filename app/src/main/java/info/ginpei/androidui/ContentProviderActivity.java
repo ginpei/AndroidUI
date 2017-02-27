@@ -1,10 +1,17 @@
 package info.ginpei.androidui;
 
 import android.database.Cursor;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class ContentProviderActivity extends AppCompatActivity {
 
@@ -26,28 +33,56 @@ public class ContentProviderActivity extends AppCompatActivity {
                 null
         );
 
-        String text;
+        final ArrayList<Contact> contacts = new ArrayList<>();
         if (cursor != null && cursor.getCount() > 0) {
-            StringBuilder builder = new StringBuilder();
             while (cursor.moveToNext()) {
-                builder
-                        .append("- ")
-                        .append(cursor.getString(0));
-
-                if (cursor.getInt(1) == 0) {
-                    builder.append(" (No phone numbers)");
-                }
-
-                builder.append("\n");
+                contacts.add(buildContactByCursor(cursor));
             }
-            text = builder.toString();
 
             cursor.close();
-        } else {
-            text = "(No contacts.)";
         }
 
-        TextView textView = (TextView) findViewById(R.id.textView_text1);
-        textView.setText(text);
+        ArrayAdapter<Contact> adapter = new ArrayAdapter<Contact>(
+                this,
+                android.R.layout.simple_list_item_2,
+                android.R.id.text1,
+                contacts
+        ) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                Contact contact = contacts.get(position);
+                String text1 = contact.displayName;
+                String text2;
+                if (contact.hasPhoneNumber) {
+                    text2 = "";
+                } else {
+                    text2 = "No phone numbers.";
+                }
+
+                View view = super.getView(position, convertView, parent);
+                ((TextView) view.findViewById(android.R.id.text1)).setText(text1);
+                ((TextView) view.findViewById(android.R.id.text2)).setText(text2);
+                return view;
+            }
+        };
+
+        ListView listView = (ListView) findViewById(R.id.listView_contacts);
+        listView.setAdapter(adapter);
+    }
+
+    private Contact buildContactByCursor(Cursor cursor) {
+        return new Contact(cursor.getString(0), (cursor.getInt(1) != 0));
+    }
+
+    class Contact {
+
+        public String displayName;
+        public boolean hasPhoneNumber;
+
+        public Contact(String displayName, boolean hasPhoneNumber) {
+            this.displayName = displayName;
+            this.hasPhoneNumber = hasPhoneNumber;
+        }
     }
 }

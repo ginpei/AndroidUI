@@ -7,15 +7,39 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 
 public class SpiralActivity extends AppCompatActivity {
 
     public static final String TAG = "G#SpiralActivity";
+    private SeekBar rollingsSeekBar;
+    private CanvasView canvasView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new CanvasView(this));
+        setContentView(R.layout.activity_spiral);
+
+        rollingsSeekBar = (SeekBar) findViewById(R.id.seekBar_rollings);
+
+        canvasView = new CanvasView(this);
+        ((RelativeLayout) findViewById(R.id.layout_canvas)).addView(canvasView);
+
+        rollingsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                canvasView.invalidate();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
     }
 
     class CanvasView extends View {
@@ -43,7 +67,8 @@ public class SpiralActivity extends AppCompatActivity {
             float x0 = width / 2;
             float y0 = height / 2;
             float radius = Math.max(x0, y0);
-            int rollings = 10;
+
+            int rollings = rollingsSeekBar.getProgress();
 
             // styles
             paint.setStyle(Paint.Style.STROKE);

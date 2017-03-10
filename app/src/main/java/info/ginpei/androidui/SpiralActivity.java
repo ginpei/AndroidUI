@@ -56,6 +56,8 @@ public class SpiralActivity extends AppCompatActivity {
 
         @Override
         protected void onDraw(Canvas canvas) {
+            final int MIN_STROKE_WIDTH = 50;
+
             super.onDraw(canvas);
 
             // reset
@@ -68,11 +70,12 @@ public class SpiralActivity extends AppCompatActivity {
             int height = getHeight();
             float x0 = width / 2;
             float y0 = height / 2;
-            float radius = Math.max(x0, y0);
 
             int rollings = rollingsSeekBar.getProgress();
             int fineness = 60 * rollings;
-            float strokeWidth = Math.min(50, radius / (rollings * 2));
+            float canvasRadius = Math.min(x0, y0);
+            float strokeWidth = Math.min(MIN_STROKE_WIDTH, canvasRadius / (rollings * 2));
+            float spiralRadius = canvasRadius - strokeWidth / 2;
 
             // styles
             paint.setStyle(Paint.Style.STROKE);
@@ -90,7 +93,7 @@ public class SpiralActivity extends AppCompatActivity {
             path.moveTo(x0, y0);
             for (int i = 0; i < fineness; i++) {
                 float progress = ((float) i) / fineness;
-                float[] pos = pos(x0, y0, radius, wholeDegree, progress);
+                float[] pos = pos(x0, y0, spiralRadius, wholeDegree, progress);
                 path.lineTo(pos[0], pos[1]);
             }
 

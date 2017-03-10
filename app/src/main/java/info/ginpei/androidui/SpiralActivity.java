@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -45,10 +47,12 @@ public class SpiralActivity extends AppCompatActivity {
     class CanvasView extends View {
 
         Paint paint = null;
+        private Path path;
 
         public CanvasView(Context context) {
             super(context);
             paint = new Paint();
+            path = new Path();
         }
 
         @Override
@@ -80,20 +84,20 @@ public class SpiralActivity extends AppCompatActivity {
             double wholeDegree = Math.PI * 2 * rollings;
 
             // loop to draw
-            float x1 = x0;
-            float y1 = y0;
+            path.reset();
+            path.moveTo(x0, y0);
             for (int i = 0; i < fineness; i++) {
                 float progress = ((float) i) / fineness;
                 float r = radius * progress;
                 double d = wholeDegree * progress;
 
-                float x2 = (float) (x0 + r * Math.cos(d));
-                float y2 = (float) (y0 + r * Math.sin(d));
-
-                canvas.drawLine(x1, y1, x2, y2, paint);
-                x1 = x2;
-                y1 = y2;
+                float x = (float) (x0 + r * Math.cos(d));
+                float y = (float) (y0 + r * Math.sin(d));
+                path.lineTo(x, y);
             }
+
+            // then, draw
+            canvas.drawPath(path, paint);
         }
     }
 }

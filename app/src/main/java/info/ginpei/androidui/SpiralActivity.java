@@ -79,6 +79,8 @@ public class SpiralActivity extends AppCompatActivity {
             paint.setStrokeWidth(strokeWidth);
             paint.setColor(Color.RED);
             paint.setAntiAlias(true);
+            paint.setStrokeCap(Paint.Cap.ROUND);
+//            paint.setStrokeJoin(Paint.Join.ROUND);  // not so effective?
 
             // calculated values
             double wholeDegree = Math.PI * 2 * rollings;

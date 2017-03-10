@@ -73,10 +73,11 @@ public class SpiralActivity extends AppCompatActivity {
             float radius = Math.max(x0, y0);
 
             int rollings = rollingsSeekBar.getProgress();
+            float strokeWidth = Math.min(50, radius / (rollings * 2));
 
             // styles
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(10);
+            paint.setStrokeWidth(strokeWidth);
             paint.setColor(Color.RED);
             paint.setAntiAlias(true);
 

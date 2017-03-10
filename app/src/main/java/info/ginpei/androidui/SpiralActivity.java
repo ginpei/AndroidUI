@@ -90,16 +90,22 @@ public class SpiralActivity extends AppCompatActivity {
             path.moveTo(x0, y0);
             for (int i = 0; i < fineness; i++) {
                 float progress = ((float) i) / fineness;
-                float r = radius * progress;
-                double d = wholeDegree * progress;
-
-                float x = (float) (x0 + r * Math.cos(d));
-                float y = (float) (y0 + r * Math.sin(d));
-                path.lineTo(x, y);
+                float[] pos = pos(x0, y0, radius, wholeDegree, progress);
+                path.lineTo(pos[0], pos[1]);
             }
 
             // then, draw
             canvas.drawPath(path, paint);
+        }
+
+        private float[] pos(float x0, float y0, float radius, double wholeDegree, float progress) {
+            float r = radius * progress;
+            double d = wholeDegree * progress;
+
+            return new float[]{
+                    (float) (x0 + r * Math.cos(d)),
+                    (float) (y0 + r * Math.sin(d)),
+            };
         }
     }
 }

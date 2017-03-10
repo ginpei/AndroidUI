@@ -104,8 +104,10 @@ public class SpiralActivity extends AppCompatActivity {
         }
 
         private float[] pos(float x0, float y0, float radius, float offsetStart, double wholeDegree, float progress) {
+            final double degreeOffset = -Math.PI * 2 / 4;  // start from 12 o'clock
+
             float r = radius * offsetStart + radius * (1 - offsetStart) * progress;
-            double d = wholeDegree * progress;
+            double d = degreeOffset + wholeDegree * progress;
 
             return new float[]{
                     (float) (x0 + r * Math.cos(d)),

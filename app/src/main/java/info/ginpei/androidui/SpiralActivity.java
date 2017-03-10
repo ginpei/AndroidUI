@@ -57,6 +57,7 @@ public class SpiralActivity extends AppCompatActivity {
         @Override
         protected void onDraw(Canvas canvas) {
             final int MIN_STROKE_WIDTH = 50;
+            final float startOffset = ((float) 2) / 5;
 
             super.onDraw(canvas);
 
@@ -74,7 +75,7 @@ public class SpiralActivity extends AppCompatActivity {
             int rollings = rollingsSeekBar.getProgress();
             int fineness = 60 * rollings;
             float canvasRadius = Math.min(x0, y0);
-            float strokeWidth = Math.min(MIN_STROKE_WIDTH, canvasRadius / (rollings * 2));
+            float strokeWidth = Math.min(MIN_STROKE_WIDTH, canvasRadius * (1 - startOffset) / (rollings * 2));
             float spiralRadius = canvasRadius - strokeWidth / 2;
 
             // styles
@@ -90,10 +91,11 @@ public class SpiralActivity extends AppCompatActivity {
 
             // loop to draw
             path.reset();
-            path.moveTo(x0, y0);
-            for (int i = 0; i < fineness; i++) {
+            float[] p0 = pos(x0, y0, spiralRadius, startOffset, wholeDegree, 0);
+            path.moveTo(p0[0], p0[1]);
+            for (int i = 1; i < fineness; i++) {
                 float progress = ((float) i) / fineness;
-                float[] pos = pos(x0, y0, spiralRadius, wholeDegree, progress);
+                float[] pos = pos(x0, y0, spiralRadius, startOffset, wholeDegree, progress);
                 path.lineTo(pos[0], pos[1]);
             }
 
@@ -101,8 +103,8 @@ public class SpiralActivity extends AppCompatActivity {
             canvas.drawPath(path, paint);
         }
 
-        private float[] pos(float x0, float y0, float radius, double wholeDegree, float progress) {
-            float r = radius * progress;
+        private float[] pos(float x0, float y0, float radius, float offsetStart, double wholeDegree, float progress) {
+            float r = radius * offsetStart + radius * (1 - offsetStart) * progress;
             double d = wholeDegree * progress;
 
             return new float[]{

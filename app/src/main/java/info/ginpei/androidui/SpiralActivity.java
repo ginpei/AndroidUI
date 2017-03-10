@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -67,12 +66,12 @@ public class SpiralActivity extends AppCompatActivity {
             // parameters
             int width = getWidth();
             int height = getHeight();
-            int fineness = 1000;
             float x0 = width / 2;
             float y0 = height / 2;
             float radius = Math.max(x0, y0);
 
             int rollings = rollingsSeekBar.getProgress();
+            int fineness = 60 * rollings;
             float strokeWidth = Math.min(50, radius / (rollings * 2));
 
             // styles

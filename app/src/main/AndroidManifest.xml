@@ -99,6 +99,9 @@
         <activity
             android:name=".ContentProviderActivity"
             android:label="Content Provider" />
+        <activity
+            android:name=".SpiralActivity"
+            android:label="Spiral" />
     </application>
 
 </manifest>

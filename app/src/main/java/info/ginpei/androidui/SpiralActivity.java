@@ -93,8 +93,8 @@ public class SpiralActivity extends AppCompatActivity {
             path.reset();
             float[] p0 = pos(x0, y0, spiralRadius, startOffset, wholeDegree, 0);
             path.moveTo(p0[0], p0[1]);
-            for (int i = 1; i < fineness; i++) {
-                float progress = ((float) i) / fineness;
+            for (int i = 0; i < fineness; i++) {
+                float progress = ((float) i + 1) / fineness;
                 float[] pos = pos(x0, y0, spiralRadius, startOffset, wholeDegree, progress);
                 path.lineTo(pos[0], pos[1]);
             }

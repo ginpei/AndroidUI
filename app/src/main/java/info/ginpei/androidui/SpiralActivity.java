@@ -45,12 +45,22 @@ public class SpiralActivity extends AppCompatActivity {
 
     class CanvasView extends View {
 
-        Paint paint = null;
+        final Paint bgPaint = new Paint();
+        final Paint spiralPaint = new Paint();
         private Path path;
 
         public CanvasView(Context context) {
             super(context);
-            paint = new Paint();
+
+            bgPaint.setStyle(Paint.Style.FILL);
+            bgPaint.setColor(Color.WHITE);
+
+            spiralPaint.setStyle(Paint.Style.STROKE);
+            spiralPaint.setColor(Color.RED);
+            spiralPaint.setAntiAlias(true);
+            spiralPaint.setStrokeCap(Paint.Cap.ROUND);
+//            spiralPaint.setStrokeJoin(Paint.Join.ROUND);  // not so effective?
+
             path = new Path();
         }
 
@@ -62,9 +72,7 @@ public class SpiralActivity extends AppCompatActivity {
             super.onDraw(canvas);
 
             // reset
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.WHITE);
-            canvas.drawPaint(paint);
+            canvas.drawPaint(bgPaint);
 
             // parameters
             int width = getWidth();
@@ -79,12 +87,7 @@ public class SpiralActivity extends AppCompatActivity {
             float spiralRadius = canvasRadius - strokeWidth / 2;
 
             // styles
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(strokeWidth);
-            paint.setColor(Color.RED);
-            paint.setAntiAlias(true);
-            paint.setStrokeCap(Paint.Cap.ROUND);
-//            paint.setStrokeJoin(Paint.Join.ROUND);  // not so effective?
+            spiralPaint.setStrokeWidth(strokeWidth);
 
             // calculated values
             double wholeDegree = Math.PI * 2 * rollings;
@@ -100,7 +103,7 @@ public class SpiralActivity extends AppCompatActivity {
             }
 
             // then, draw
-            canvas.drawPath(path, paint);
+            canvas.drawPath(path, spiralPaint);
         }
 
         private float[] pos(float x0, float y0, float radius, float offsetStart, double wholeDegree, float progress) {

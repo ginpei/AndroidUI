@@ -80,7 +80,7 @@ public class SpiralActivity extends AppCompatActivity {
             float x0 = width / 2;
             float y0 = height / 2;
 
-            int rollings = rollingsSeekBar.getProgress();
+            int rollings = rollingsSeekBar.getProgress() + 1;  // at least 1
             int fineness = 60 * rollings;
             float canvasRadius = Math.min(x0, y0);
             float strokeWidth = Math.min(MIN_STROKE_WIDTH, canvasRadius * (1 - startOffset) / (rollings * 2));

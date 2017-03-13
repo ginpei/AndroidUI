@@ -5,8 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -47,7 +49,10 @@ public class SpiralActivity extends AppCompatActivity {
 
         final Paint bgPaint = new Paint();
         final Paint spiralPaint = new Paint();
+        final Paint arcPaint = new Paint();
         private Path path;
+        private Path arcPath = new Path();
+        private RectF rect = new RectF();
 
         public CanvasView(Context context) {
             super(context);
@@ -60,6 +65,12 @@ public class SpiralActivity extends AppCompatActivity {
             spiralPaint.setAntiAlias(true);
             spiralPaint.setStrokeCap(Paint.Cap.ROUND);
 //            spiralPaint.setStrokeJoin(Paint.Join.ROUND);  // not so effective?
+
+            arcPaint.setStyle(Paint.Style.STROKE);
+            arcPaint.setColor(Color.BLUE);
+            arcPaint.setAntiAlias(true);
+            arcPaint.setStrokeCap(Paint.Cap.ROUND);
+//            arcPaint.setStrokeJoin(Paint.Join.ROUND);  // not so effective?
 
             path = new Path();
         }
@@ -104,6 +115,22 @@ public class SpiralActivity extends AppCompatActivity {
 
             // then, draw
             canvas.drawPath(path, spiralPaint);
+
+            float wholeAngle = 360 * rollings;
+            float startAngleOffset = -90;
+
+            arcPath.reset();
+            arcPath.moveTo(p0[0], p0[1]);
+            for (int i = 0; i < fineness; i++) {
+                float progress = ((float) i) / fineness;
+                float radius = spiralRadius * startOffset + spiralRadius * (1 - startOffset) * progress;
+                rect.set(x0 - radius, y0 - radius, x0 + radius, y0 + radius);
+                Log.d(TAG, String.format("[%s] angle: %s", i, startAngleOffset + wholeAngle * progress));
+                arcPath.arcTo(rect, startAngleOffset + wholeAngle * progress, wholeAngle / fineness);
+            }
+
+            arcPaint.setStrokeWidth(strokeWidth);
+            canvas.drawPath(arcPath, arcPaint);
         }
 
         private float[] pos(float x0, float y0, float radius, float offsetStart, double wholeDegree, float progress) {

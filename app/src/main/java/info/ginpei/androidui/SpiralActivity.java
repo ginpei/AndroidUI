@@ -17,6 +17,7 @@ public class SpiralActivity extends AppCompatActivity {
 
     public static final String TAG = "G#SpiralActivity";
     private SeekBar rollingsSeekBar;
+    private SeekBar finenessSeekBar;
     private CanvasView canvasView;
 
     @Override
@@ -25,11 +26,12 @@ public class SpiralActivity extends AppCompatActivity {
         setContentView(R.layout.activity_spiral);
 
         rollingsSeekBar = (SeekBar) findViewById(R.id.seekBar_rollings);
+        finenessSeekBar = (SeekBar) findViewById(R.id.seekBar_fineness);
 
         canvasView = new CanvasView(this);
         ((RelativeLayout) findViewById(R.id.layout_canvas)).addView(canvasView);
 
-        rollingsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 canvasView.invalidate();
@@ -42,11 +44,14 @@ public class SpiralActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
-        });
+        };
+        rollingsSeekBar.setOnSeekBarChangeListener(listener);
+        finenessSeekBar.setOnSeekBarChangeListener(listener);
     }
 
     class CanvasView extends View {
 
+        public static final int MIN_FINENESS = 4;
         final Paint bgPaint = new Paint();
         final Paint spiralPaint = new Paint();
         final Paint arcPaint = new Paint();
@@ -92,7 +97,7 @@ public class SpiralActivity extends AppCompatActivity {
             float y0 = height / 2;
 
             int rollings = rollingsSeekBar.getProgress() + 1;  // at least 1
-            int fineness = 12 * rollings;
+            int fineness = Math.max(MIN_FINENESS, finenessSeekBar.getProgress()) * rollings;
             float canvasRadius = Math.min(x0, y0);
             float strokeWidth = Math.min(MIN_STROKE_WIDTH, canvasRadius * (1 - startOffset) / (rollings * 2));
             float spiralRadius = canvasRadius - strokeWidth / 2;

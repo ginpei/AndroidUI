@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class SpiralActivity extends AppCompatActivity {
 
     public static final String TAG = "G#SpiralActivity";
+    private TextView rollingsTextView;
     private SeekBar rollingsSeekBar;
+    private TextView finenessTextView;
     private SeekBar finenessSeekBar;
     private CanvasView canvasView;
 
@@ -25,7 +28,9 @@ public class SpiralActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spiral);
 
+        rollingsTextView = (TextView) findViewById(R.id.text_rollings);
         rollingsSeekBar = (SeekBar) findViewById(R.id.seekBar_rollings);
+        finenessTextView = (TextView) findViewById(R.id.text_fineness);
         finenessSeekBar = (SeekBar) findViewById(R.id.seekBar_fineness);
 
         canvasView = new CanvasView(this);
@@ -98,6 +103,9 @@ public class SpiralActivity extends AppCompatActivity {
 
             int rollings = rollingsSeekBar.getProgress() + 1;  // at least 1
             int fineness = Math.max(MIN_FINENESS, finenessSeekBar.getProgress()) * rollings;
+            rollingsTextView.setText(String.valueOf(rollings));
+            finenessTextView.setText(String.valueOf(Math.max(MIN_FINENESS, finenessSeekBar.getProgress())));
+
             float canvasRadius = Math.min(x0, y0);
             float strokeWidth = Math.min(MIN_STROKE_WIDTH, canvasRadius * (1 - startOffset) / (rollings * 2));
             float spiralRadius = canvasRadius - strokeWidth / 2;

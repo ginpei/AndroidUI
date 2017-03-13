@@ -92,7 +92,7 @@ public class SpiralActivity extends AppCompatActivity {
             float y0 = height / 2;
 
             int rollings = rollingsSeekBar.getProgress() + 1;  // at least 1
-            int fineness = 60 * rollings;
+            int fineness = 12 * rollings;
             float canvasRadius = Math.min(x0, y0);
             float strokeWidth = Math.min(MIN_STROKE_WIDTH, canvasRadius * (1 - startOffset) / (rollings * 2));
             float spiralRadius = canvasRadius - strokeWidth / 2;
@@ -129,7 +129,7 @@ public class SpiralActivity extends AppCompatActivity {
                 arcPath.arcTo(rect, startAngleOffset + wholeAngle * progress, wholeAngle / fineness);
             }
 
-            arcPaint.setStrokeWidth(strokeWidth);
+            arcPaint.setStrokeWidth(1);
             canvas.drawPath(arcPath, arcPaint);
         }
 

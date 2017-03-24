@@ -116,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.button_spiral:
                 startActivity(new Intent(this, SpiralActivity.class));
                 break;
+
+            case R.id.button_overlay:
+                startActivity(new Intent(this, OverlayActivity.class));
+                break;
         }
     }
 }

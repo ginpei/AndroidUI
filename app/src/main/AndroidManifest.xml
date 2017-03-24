@@ -102,6 +102,9 @@
         <activity
             android:name=".SpiralActivity"
             android:label="Spiral" />
+        <activity
+            android:name=".OverlayActivity"
+            android:theme="@style/AppTheme.Overlay" />
     </application>
 
 </manifest>
